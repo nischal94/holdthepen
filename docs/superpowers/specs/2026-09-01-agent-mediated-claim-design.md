@@ -1,8 +1,6 @@
-<!-- /autoplan restore point: docs/superpowers/specs/.autoplan-restore-20260901.md -->
+# Design — Hold the Pen: an agent-mediation layer for consequential forms
 
-# Design — Hold the Pen (Reviewable Actions): an agent-mediation layer for consequential forms
-
-Date: 2026-09-01 (rev 3 — APPROVED after /autoplan 4-phase dual-voice review)
+Date: 2026-09-01 (rev 3, approved)
 Deadline: 2026-09-03 13:00 PT (2026-09-04 01:30 IST)
 Status: APPROVED — build order in §11
 
@@ -236,9 +234,6 @@ silently.
 
 ---
 
-_Review provenance: /autoplan, 4 phases × dual voices (Claude opus subagents +
-raw codex exec), 33 decisions — full audit trail in
-[autoplan-audit-trail-20260901.md](autoplan-audit-trail-20260901.md); rev 2
-snapshot in [.autoplan-restore-20260901.md](.autoplan-restore-20260901.md);
-test plan in [test-plan-20260901.md](test-plan-20260901.md). U1 accepted
-(replay fallback); T1 kept (no commit tool); T2 middle cut._
+_Reviewed in four passes (strategy, design, engineering, developer
+experience), each with two independent reviewers. The decision log and the
+test plan live alongside this document._

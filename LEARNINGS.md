@@ -12,8 +12,9 @@ lesson is superseded, the old entry stays and gains a one-line
 
 ## 2026-09-01 → 02 — Research, spec, review gauntlet, preflight deploy, test loop
 
-Shipped: challenge brief, spec rev 3 (approved after /autoplan CEO → Design →
-Eng → DX with Claude + Codex voices, 33 logged decisions), rename to Hold the
+Shipped: challenge brief, spec rev 3 (approved after a four-lens review —
+strategy, design, engineering, developer experience — with two independent
+reviewers, 33 logged decisions), rename to Hold the
 Pen, Vercel production deploy verified, full test/CI scaffold green.
 
 ### 1. Read the spec repo's issues, not just its docs — two premises were wrong
@@ -37,7 +38,7 @@ declarative API, no iframe tools. Design to the intersection.
 
 ### 3. A React reducer cannot back once-registered tool callbacks
 
-Two independent reviewers (Claude eng subagent, Codex) found the same
+Two independent reviewers found the same
 architecture bug in the spec: tools are registered once and never re-registered
 (the unregister/re-register race is unprotected in the spec), so an `execute`
 closing over reducer state reads the state at mount forever. The fix — a
@@ -48,7 +49,7 @@ regression guard.
 
 ### 4. Two audits of the same plan converged where it mattered and split on cost
 
-Claude's audit priced the test/CI plan at ~5 h; Codex's at 18.5 h. Both agreed
+One audit priced the test/CI plan at ~5 h; the other at 18.5 h. Both agreed
 on the foundations (lockfile, `npm ci`, SHA pins, least-privilege tokens,
 Dependabot must not open PRs during the judging freeze, `dependency-review`
 never fires on push-to-main = false green). Where they split, the deadline
@@ -70,7 +71,7 @@ do it before falling in love. Coined phrases win: `holdthepen` was free.
 
 ### 7. Verify a settings change in a fresh session, not by retrying
 
-`.claude/settings.local.json` was written mid-session and the next `git init`
+The local agent permission file was written mid-session and the next `git init`
 still prompted — the settings watcher only watches directories that had a
 settings file at session start. The restart proved it applied (first `git
 status` ran without a prompt). Recording the change as "pending" until then was

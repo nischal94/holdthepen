@@ -36,7 +36,7 @@ announced (~2026-09-23). Fork to keep building.
 **Repo state:** local `main`, 6 commits, clean tree, **not yet on GitHub**.
 Live: https://holdthepen.vercel.app (preflight build, Vercel CLI deploys,
 project `holdthepen`). Spec rev 3 approved after a 4-phase dual-voice
-/autoplan review: `docs/superpowers/specs/2026-09-01-agent-mediated-claim-design.md`
+a four-lens review: `docs/superpowers/specs/2026-09-01-agent-mediated-claim-design.md`
 (+ audit trail, test plan, rev-2 snapshot alongside).
 
 **What is DONE:** preflight page + origin-isolation header, verified on the
@@ -49,15 +49,15 @@ prove-it-can-fail tests · executable eval validator · SHA-pinned `ci.yml` +
 rule).
 
 **What is NOT verified:** WebMCP tool registration in a real flagged Chrome
-(only Nischal can check — the Claude browser pane is Chrome 148 with no
+(only the owner can check — the agent's browser is Chrome 148 with no
 `document.modelContext`). CI has never run (no GitHub repo yet).
 
 ### NEXT — in this order
 
-1. **Nischal:** create the public repo and push (command in the kickoff), then
+1. **Owner:** create the public repo and push (command in the kickoff), then
    tick the hour-0 items in `docs/REPO-SETTINGS.md`. Confirm `ci` and
    `gitleaks` go green on GitHub — first proof CI works from a bare VM.
-2. **Nischal:** open https://holdthepen.vercel.app in Chrome 149+ with
+2. **Owner:** open https://holdthepen.vercel.app in Chrome 149+ with
    `chrome://flags/#enable-webmcp-testing` enabled. Expected banner:
    "✅ WebMCP is live on this page — 1 tool registered". Report the text.
    This closes failure mode F7 (the last open one in the spec).
@@ -71,12 +71,10 @@ subscribe`, per-field provenance + revision, review FSM
 
 **Environment quirks (verified 2026-09-02):** `npm`/`npx` are sfw-shimmed
 inside the agent sandbox and fail — run `./node_modules/.bin/<tool>` directly;
-installs stay with Nischal. Every node process prints "failed to copy trust
+installs are run by the owner. Every node process prints "failed to copy trust
 settings" to stderr — noise, filter it. `.git/` and `.github/workflows/` writes
 need the sandbox disabled. Agent commits use `SKIP_SIMPLE_GIT_HOOKS=1` after
-running the same checks by hand. `.claude/settings.local.json` allows git
-except merge / `gh pr merge` (those ask). `codex exec` needs
-`--skip-git-repo-check` and a ≥600 s Bash timeout.
+running the same checks by hand. Local agent permissions allow git
 
 ### KICKOFF PROMPT for the next session
 
@@ -85,7 +83,7 @@ except merge / `gh pr merge` (those ask). `codex exec` needs
 > and verified on the production origin; test loop green end to end; repo not
 > yet on GitHub; WebMCP registration unverified in real Chrome.** Do NOT
 > re-review the spec (rev 3 is approved). If the repo is still local, hand
-> Nischal: `gh repo create holdthepen --public --source=. --remote=origin
+> the owner: `gh repo create holdthepen --public --source=. --remote=origin
 --description "You hold the pen. An agent-mediation layer for consequential
 forms, built on WebMCP." --push`. Ask for the Chrome-flag banner text. Then
 > start Task 2 per the NEXT section, stale-closure test first.
