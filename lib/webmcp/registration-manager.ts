@@ -118,6 +118,11 @@ export function createRegistrationManager(
                 r.reason instanceof Error ? r.reason.message : String(r.reason),
             });
         });
+        for (const f of failed) {
+          console.warn(
+            `[registration-manager] Failed to register "${f.name}": ${f.reason}`
+          );
+        }
         set(
           failed.length === 0
             ? { state: "ready", registered }
