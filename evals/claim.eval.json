@@ -1,0 +1,87 @@
+{
+  "$comment": "Chrome expectedCall eval format. Validated by evals/evals.test.ts against lib/webmcp/tool-schemas.ts. Direct, ambiguous, and mid-chain cases per the test plan.",
+  "tools": [
+    "get_claim_state",
+    "explain",
+    "review_agent_entries",
+    "fill_field",
+    "clear_field",
+    "navigate_to_section",
+    "prepare_submission_review"
+  ],
+  "cases": [
+    {
+      "id": "explain-direct",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What does 'money you received last month' actually mean on this form?"
+        }
+      ],
+      "expectedCall": [
+        {
+          "functionName": "explain",
+          "arguments": { "question_id": "income_received_last_month" }
+        }
+      ]
+    },
+    {
+      "id": "explain-not-fill",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I'm confused by the household question, can you help me understand it before I answer?"
+        }
+      ],
+      "expectedCall": [
+        {
+          "functionName": "explain",
+          "arguments": { "question_id": "household_size", "intent": "meaning" }
+        }
+      ]
+    },
+    {
+      "id": "fill-direct",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Put my income in: I received 1450 last month."
+        }
+      ],
+      "expectedCall": [
+        {
+          "functionName": "fill_field",
+          "arguments": {
+            "field_id": "income_received_last_month",
+            "value": "1450"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ambiguous-help-with-section",
+      "messages": [
+        { "role": "user", "content": "Help me with the income section." }
+      ],
+      "expectedCall": [
+        { "functionName": "get_claim_state", "arguments": {} },
+        {
+          "functionName": "navigate_to_section",
+          "arguments": { "section": "income" }
+        }
+      ]
+    },
+    {
+      "id": "mid-chain-stage-then-observe",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I think everything is filled in. Get it ready for me to check."
+        }
+      ],
+      "expectedCall": [
+        { "functionName": "prepare_submission_review", "arguments": {} }
+      ]
+    }
+  ]
+}
