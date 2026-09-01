@@ -39,13 +39,17 @@ export function Replay() {
   async function play() {
     setConfirming(false);
     ctrl.current?.stop();
-    ctrl.current = createReplay(store);
+    const controller = createReplay(store);
+    ctrl.current = controller;
     setLines([]);
     setPlaying(true);
     announce("Recorded demonstration started.");
-    const outcome = await ctrl.current.play((i, text) => {
+    const outcome = await controller.play((i, text) => {
+      if (ctrl.current !== controller) return;
       setLines((l) => [...l, { actor: REPLAY_STEPS[i].actor, text }]);
     });
+    // A newer run may have replaced this one; only the current run reports.
+    if (ctrl.current !== controller) return;
     setPlaying(false);
     announce(
       outcome === "finished"
