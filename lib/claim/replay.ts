@@ -14,12 +14,14 @@ export interface ReplayStep {
   text: string;
   /** Milliseconds to wait before running this step. */
   delay: number;
+  /** Optional action; a returned string replaces `text` in the transcript. */
   run?: (
     store: ClaimStore,
     tools: Record<string, WebMcpToolDefinition>
   ) => Promise<string | void>;
 }
 
+/** Execute one tool through its registered definition and parse the JSON reply. */
 async function call(
   tools: Record<string, WebMcpToolDefinition>,
   name: string,
@@ -31,6 +33,7 @@ async function call(
   >;
 }
 
+/** The scripted beats, in order. Timing is the only thing that is staged. */
 export const REPLAY_STEPS: ReplayStep[] = [
   {
     actor: "narrator",
