@@ -23,8 +23,22 @@ export function Replay() {
   const [playing, setPlaying] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const ctrl = useRef<ReplayController | null>(null);
+  const playButton = useRef<HTMLButtonElement | null>(null);
+  const confirmButton = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => () => ctrl.current?.stop(), []);
+
+  // Keyboard focus must follow the dialog: into it when it opens (the Play
+  // button it replaced is gone), back to Play when it closes.
+  const mounted = useRef(false);
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true; // never steal focus on initial page load
+      return;
+    }
+    if (confirming) confirmButton.current?.focus();
+    else playButton.current?.focus({ preventScroll: true });
+  }, [confirming]);
 
   /** Start, or ask first when the form already holds the person's answers. */
   function requestPlay() {
@@ -97,6 +111,7 @@ export function Replay() {
           </p>
           <div className="mt-2 flex gap-2">
             <button
+              ref={confirmButton}
               type="button"
               onClick={() => void play()}
               className="min-h-11 rounded bg-neutral-900 px-4 text-sm font-medium text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
@@ -115,6 +130,7 @@ export function Replay() {
       ) : (
         <div className="mt-3 flex gap-2">
           <button
+            ref={playButton}
             type="button"
             onClick={requestPlay}
             disabled={playing}
