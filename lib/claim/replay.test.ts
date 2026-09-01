@@ -67,6 +67,26 @@ describe("recorded demonstration", () => {
     });
   });
 
+  it("a failing step clears partial demonstration data and reports 'stopped'", async () => {
+    const store = createClaimStore(CLAIM_SCHEMA);
+    const steps = [
+      REPLAY_STEPS[1], // types the name
+      {
+        actor: "agent" as const,
+        text: "",
+        delay: 10,
+        run: async () => {
+          throw new Error("boom");
+        },
+      },
+    ];
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    const done = createReplay(store, steps).play(() => {});
+    await vi.runAllTimersAsync();
+    expect(await done).toBe("stopped");
+    expect(store.getSnapshot().fields.full_name.value).toBe("");
+  });
+
   it("storeHasContent is false when empty and true after any entry", () => {
     const store = createClaimStore(CLAIM_SCHEMA);
     expect(storeHasContent(store)).toBe(false);

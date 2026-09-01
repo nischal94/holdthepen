@@ -204,15 +204,26 @@ export function createReplay(
       cancelled = false;
       finished = false;
       store.reset();
-      for (let i = 0; i < steps.length; i++) {
-        if (cancelled) return "stopped";
-        await wait(steps[i].delay);
-        if (cancelled) return "stopped";
-        const out = steps[i].run
-          ? await steps[i].run!(store, tools)
-          : undefined;
-        if (cancelled) return "stopped";
-        onStep(i, typeof out === "string" && out ? out : steps[i].text);
+      try {
+        for (let i = 0; i < steps.length; i++) {
+          if (cancelled) return "stopped";
+          await wait(steps[i].delay);
+          if (cancelled) return "stopped";
+          const out = steps[i].run
+            ? await steps[i].run!(store, tools)
+            : undefined;
+          if (cancelled) return "stopped";
+          onStep(i, typeof out === "string" && out ? out : steps[i].text);
+        }
+      } catch (error) {
+        // A failing step must not strand partial demonstration data.
+        console.warn(
+          "[replay] step failed; clearing demonstration data",
+          error
+        );
+        cancelled = true;
+        store.reset();
+        return "stopped";
       }
       finished = true;
       return "finished";
