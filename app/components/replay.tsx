@@ -25,6 +25,7 @@ export function Replay() {
   const ctrl = useRef<ReplayController | null>(null);
   const playButton = useRef<HTMLButtonElement | null>(null);
   const confirmButton = useRef<HTMLButtonElement | null>(null);
+  const stopButton = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => () => ctrl.current?.stop(), []);
 
@@ -37,8 +38,9 @@ export function Replay() {
       return;
     }
     if (confirming) confirmButton.current?.focus();
+    else if (playing) stopButton.current?.focus({ preventScroll: true });
     else playButton.current?.focus({ preventScroll: true });
-  }, [confirming]);
+  }, [confirming, playing]);
 
   /** Start, or ask first when the form already holds the person's answers. */
   function requestPlay() {
@@ -144,6 +146,7 @@ export function Replay() {
           </button>
           {playing && (
             <button
+              ref={stopButton}
               type="button"
               onClick={stop}
               className="min-h-11 rounded border border-neutral-600 px-4 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
