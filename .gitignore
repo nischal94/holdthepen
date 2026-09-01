@@ -1,0 +1,12 @@
+node_modules/
+.next/
+.vercel/
+out/
+.env*
+.DS_Store
+conversation.md
+scripts/
+.impeccable/
+.claude/
+*.tsbuildinfo
+next-env.d.ts
