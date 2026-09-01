@@ -69,7 +69,7 @@ subscribe`, per-field provenance + revision, review FSM
    green; coverage trip-wire holds.
 4. Then Task 3 (registration manager) → Task 4 (7 tools + error envelope) per §11.
 
-**Local tooling notes** live in `CLAUDE.local.md` (untracked).
+**Local tooling notes** live in an untracked file at the repo root.
 
 ### KICKOFF PROMPT for the next session
 
