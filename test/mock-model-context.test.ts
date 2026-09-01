@@ -25,7 +25,9 @@ describe("FakeModelContext contracts", () => {
   it("registerTool REJECTS on duplicate name (silent-loss guard)", async () => {
     const mc = new FakeModelContext();
     await mc.registerTool(tool("dup"));
-    await expect(mc.registerTool(tool("dup"))).rejects.toThrow(/already registered/);
+    await expect(mc.registerTool(tool("dup"))).rejects.toThrow(
+      /already registered/
+    );
   });
 
   it("registerTool rejects empty name, empty description, bad chars", async () => {
@@ -34,7 +36,9 @@ describe("FakeModelContext contracts", () => {
     await expect(
       mc.registerTool({ ...tool("x"), description: "" })
     ).rejects.toThrow(/description/);
-    await expect(mc.registerTool(tool("has space"))).rejects.toThrow(/violates/);
+    await expect(mc.registerTool(tool("has space"))).rejects.toThrow(
+      /violates/
+    );
   });
 
   it("executeTool requires a JSON string and passes the parsed object", async () => {
@@ -44,9 +48,9 @@ describe("FakeModelContext contracts", () => {
     await expect(
       mc.executeTool(reg, { text: "hi" } as unknown as string)
     ).rejects.toThrow(/JSON string/);
-    await expect(mc.executeTool(reg, JSON.stringify({ text: "hi" }))).resolves.toBe(
-      "got hi"
-    );
+    await expect(
+      mc.executeTool(reg, JSON.stringify({ text: "hi" }))
+    ).resolves.toBe("got hi");
   });
 
   it("aborting an execution fires the signal and both cancel event spellings", async () => {

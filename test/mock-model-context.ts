@@ -25,7 +25,10 @@ export interface RecordedCall {
   error?: unknown;
 }
 
-export class FakeModelContext extends EventTarget implements WebMcpModelContext {
+export class FakeModelContext
+  extends EventTarget
+  implements WebMcpModelContext
+{
   readonly tools = new Map<string, WebMcpToolDefinition>();
   readonly calls: RecordedCall[] = [];
   readonly registrationAttempts: string[] = [];
@@ -64,7 +67,10 @@ export class FakeModelContext extends EventTarget implements WebMcpModelContext 
       );
     }
     if (options?.signal?.aborted) {
-      throw new DOMException("registerTool: signal already aborted", "AbortError");
+      throw new DOMException(
+        "registerTool: signal already aborted",
+        "AbortError"
+      );
     }
     this.tools.set(tool.name, tool);
     options?.signal?.addEventListener(
@@ -97,7 +103,10 @@ export class FakeModelContext extends EventTarget implements WebMcpModelContext 
   ): Promise<unknown> {
     const def = this.tools.get(tool.name);
     if (!def) {
-      throw new DOMException(`executeTool: no tool "${tool.name}"`, "NotFoundError");
+      throw new DOMException(
+        `executeTool: no tool "${tool.name}"`,
+        "NotFoundError"
+      );
     }
     if (typeof inputArguments !== "string") {
       throw new TypeError(
@@ -108,7 +117,10 @@ export class FakeModelContext extends EventTarget implements WebMcpModelContext 
     try {
       input = JSON.parse(inputArguments) as Record<string, unknown>;
     } catch {
-      throw new DOMException("executeTool: inputArguments is not valid JSON", "DataError");
+      throw new DOMException(
+        "executeTool: inputArguments is not valid JSON",
+        "DataError"
+      );
     }
     const controller = new AbortController();
     const forward = () => {
@@ -144,8 +156,14 @@ export function installFakeModelContext(
   location: "document" | "navigator" | "none" = "document"
 ): { fake: FakeModelContext; restore: () => void } {
   const fake = new FakeModelContext();
-  const docDescriptor = Object.getOwnPropertyDescriptor(document, "modelContext");
-  const navDescriptor = Object.getOwnPropertyDescriptor(navigator, "modelContext");
+  const docDescriptor = Object.getOwnPropertyDescriptor(
+    document,
+    "modelContext"
+  );
+  const navDescriptor = Object.getOwnPropertyDescriptor(
+    navigator,
+    "modelContext"
+  );
 
   if (location === "document") {
     Object.defineProperty(document, "modelContext", {
@@ -162,9 +180,11 @@ export function installFakeModelContext(
   return {
     fake,
     restore: () => {
-      if (docDescriptor) Object.defineProperty(document, "modelContext", docDescriptor);
+      if (docDescriptor)
+        Object.defineProperty(document, "modelContext", docDescriptor);
       else delete (document as { modelContext?: unknown }).modelContext;
-      if (navDescriptor) Object.defineProperty(navigator, "modelContext", navDescriptor);
+      if (navDescriptor)
+        Object.defineProperty(navigator, "modelContext", navDescriptor);
       else delete (navigator as { modelContext?: unknown }).modelContext;
     },
   };

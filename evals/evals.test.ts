@@ -44,7 +44,10 @@ describe("eval fixtures reference real tools", () => {
             expect(schema, `unknown tool "${call.functionName}"`).toBeDefined();
             const props = Object.keys(schema.inputSchema.properties ?? {});
             for (const key of Object.keys(call.arguments)) {
-              expect(props, `arg "${key}" not in ${call.functionName}`).toContain(key);
+              expect(
+                props,
+                `arg "${key}" not in ${call.functionName}`
+              ).toContain(key);
             }
           }
         });

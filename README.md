@@ -16,7 +16,7 @@ registers one demonstration tool. The full claim form ships next.
    or open the URL in the ChatGPT desktop app's browser (site tools on
    GPT-5.6 Sol/Terra).
 2. Open the deployed URL. The status banner turns green when WebMCP is live.
-3. Ask your agent: *"What does the demo status tool on this page say?"*
+3. Ask your agent: _"What does the demo status tool on this page say?"_
 
 ## Develop
 

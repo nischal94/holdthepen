@@ -16,13 +16,25 @@ describe("Preflight page", () => {
     await waitFor(() =>
       expect(screen.getByRole("status")).toHaveTextContent(/not active/i)
     );
-    expect(screen.getByText(/chrome:\/\/flags\/#enable-webmcp-testing/)).toBeVisible();
+    expect(
+      screen.getByText(/chrome:\/\/flags\/#enable-webmcp-testing/)
+    ).toBeVisible();
     expect(screen.getByText(/API absent/i)).toBeInTheDocument();
   });
 
   it("registers exactly one tool when the API exists and reports it green", async () => {
     const installed = installFakeModelContext("document");
-    restore = installed.restore;
+    // The banner turns green only with origin isolation AND a working API,
+    // the same two runtime facts the deployed preflight asserts. jsdom has
+    // neither by default, so simulate isolation here.
+    Object.defineProperty(window, "originAgentCluster", {
+      value: true,
+      configurable: true,
+    });
+    restore = () => {
+      installed.restore();
+      delete (window as { originAgentCluster?: boolean }).originAgentCluster;
+    };
     render(<PreflightPage />);
     await waitFor(() =>
       expect(screen.getByRole("status")).toHaveTextContent(/1 tool registered/)

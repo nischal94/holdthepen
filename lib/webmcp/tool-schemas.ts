@@ -8,7 +8,10 @@ export interface ToolSchema {
   readOnly: boolean;
   inputSchema: {
     type: "object";
-    properties?: Record<string, { type: string; description?: string; enum?: string[] }>;
+    properties?: Record<
+      string,
+      { type: string; description?: string; enum?: string[] }
+    >;
     required?: string[];
   };
 }
@@ -23,4 +26,9 @@ export const TOOL_SCHEMAS: Record<string, ToolSchema> = {
 };
 
 export const NAME_PATTERN = /^[A-Za-z0-9_.-]{1,128}$/;
-export const BUDGET = { name: 30, description: 500, paramDescription: 150, output: 1500 };
+export const BUDGET = {
+  name: 30,
+  description: 500,
+  paramDescription: 150,
+  output: 1500,
+};

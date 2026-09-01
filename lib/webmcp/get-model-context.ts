@@ -20,6 +20,7 @@ export function getModelContext(): WebMcpModelContext | undefined {
 export function describeModelContextLocation(): ModelContextLocation {
   if (typeof document === "undefined") return "absent";
   if (document.modelContext) return "document.modelContext";
-  if (navigator.modelContext) return "navigator.modelContext (deprecated alias)";
+  if (navigator.modelContext)
+    return "navigator.modelContext (deprecated alias)";
   return "absent";
 }

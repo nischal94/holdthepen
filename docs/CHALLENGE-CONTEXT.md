@@ -5,11 +5,11 @@ Source-of-truth: https://webmcp.devpost.com/rules (Official Rules govern over al
 
 ## Hard deadlines
 
-| Event | When |
-|---|---|
+| Event             | When                                                     |
+| ----------------- | -------------------------------------------------------- |
 | Submission closes | **Thu Sep 3, 2026, 1:00 PM PT** (= Fri Sep 4, 01:30 IST) |
-| Judging | Sep 4 (10:00 PT) – Sep 21 (17:00 PT) |
-| Winners | ~Sep 23, 2026, 2:00 PM PT |
+| Judging           | Sep 4 (10:00 PT) – Sep 21 (17:00 PT)                     |
+| Winners           | ~Sep 23, 2026, 2:00 PM PT                                |
 
 After the deadline: do NOT touch the Devpost entry, the repo, or the live site
 until winners are announced. Fork to keep building.
@@ -57,6 +57,7 @@ These people wrote the spec and the docs. Spec-literate work will be recognized.
 ## API surface
 
 Imperative — `document.modelContext`:
+
 - `registerTool({name, description, inputSchema, execute, annotations}, {signal, exposedTo})`
 - `getTools({fromOrigins})` → RegisteredTool[] (name, description, inputSchema, origin, window)
 - `executeTool(tool, argsJsonString, {signal})`
@@ -65,6 +66,7 @@ Imperative — `document.modelContext`:
 - annotations: `readOnlyHint`, `untrustedContentHint`
 
 Declarative — HTML form annotations:
+
 - `toolname`, `tooldescription` on `<form>`; `toolparamdescription` on fields
 - `toolautosubmit` to submit + navigate on invocation
 - `SubmitEvent.agentInvoked` (boolean) and `SubmitEvent.respondWith(Promise)`
@@ -108,6 +110,7 @@ on the DEPLOYED url, not just localhost.
   ]
 }
 ```
+
 Supports nested `ordered` / `unordered` blocks for multi-tool journeys.
 Failure modes to test: wrong tool, wrong order, wrong arguments, wrong output,
 mid-chain failure (a step fails but the chain completes anyway).
@@ -158,7 +161,7 @@ service-worker WebMCP for sites the user doesn't have open.
 
 Spec: https://github.com/webmachinelearning/webmcp
 Chrome docs: https://developer.chrome.com/docs/ai/webmcp
-  /imperative-api · /declarative-api · /secure-tools · /best-practices · /evals
+/imperative-api · /declarative-api · /secure-tools · /best-practices · /evals
 DevTools: https://developer.chrome.com/docs/devtools/application/webmcp
 Types: npm `webmcp-types` · React hook: npm `use-webmcp-tool` (Apache-2.0, by Chrome)
 Showcase: https://developers.openai.com/showcase?view=webmcp-apps

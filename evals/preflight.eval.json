@@ -5,15 +5,16 @@
     {
       "id": "preflight-direct",
       "messages": [
-        { "role": "user", "content": "What does the demo status tool on this page say?" }
+        {
+          "role": "user",
+          "content": "What does the demo status tool on this page say?"
+        }
       ],
       "expectedCall": [{ "functionName": "get_demo_status", "arguments": {} }]
     },
     {
       "id": "preflight-ambiguous",
-      "messages": [
-        { "role": "user", "content": "Is WebMCP working here?" }
-      ],
+      "messages": [{ "role": "user", "content": "Is WebMCP working here?" }],
       "expectedCall": [{ "functionName": "get_demo_status", "arguments": {} }]
     }
   ]

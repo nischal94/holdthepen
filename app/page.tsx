@@ -71,7 +71,10 @@ export default function PreflightPage() {
           name: "get_demo_status",
           description: schema.description,
           inputSchema: schema.inputSchema,
-          annotations: { readOnlyHint: schema.readOnly, untrustedContentHint: false },
+          annotations: {
+            readOnlyHint: schema.readOnly,
+            untrustedContentHint: false,
+          },
           execute: async () => {
             setState((s) => ({ ...s, demoCallCount: s.demoCallCount + 1 }));
             return "Preflight OK. WebMCP tool execution works on this page. This is a deploy-verification build of Hold the Pen; the full claim form is under construction.";
@@ -215,8 +218,8 @@ export default function PreflightPage() {
           <li>
             <span className="font-medium">Or use the ChatGPT desktop app:</span>{" "}
             its in-app browser supports WebMCP by default (GPT-5.6 Sol/Terra;
-            Luna has site tools disabled). Open this URL there and click
-            “Site tools” in the address bar.
+            Luna has site tools disabled). Open this URL there and click “Site
+            tools” in the address bar.
           </li>
           <li>
             Return here — the status above turns green automatically. Then ask
@@ -229,9 +232,9 @@ export default function PreflightPage() {
       </section>
 
       <p className="mt-10 border-t border-neutral-300 pt-4 text-sm text-neutral-500">
-        This page is the day-one deploy verification for Hold the Pen — an
-        agent fills the form, you hold the pen. Built for the WebMCP Challenge.
-        The claim form arrives next.
+        This page is the day-one deploy verification for Hold the Pen — an agent
+        fills the form, you hold the pen. Built for the WebMCP Challenge. The
+        claim form arrives next.
       </p>
     </main>
   );
@@ -247,7 +250,11 @@ function Row({
   detail: string;
 }) {
   const icon =
-    status === "pass" ? "✅ Pass" : status === "fail" ? "❌ Fail" : "… Checking";
+    status === "pass"
+      ? "✅ Pass"
+      : status === "fail"
+        ? "❌ Fail"
+        : "… Checking";
   return (
     <tr className="border-b border-neutral-200 align-top">
       <td className="py-2 pr-4">{label}</td>

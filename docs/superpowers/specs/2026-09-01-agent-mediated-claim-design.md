@@ -1,4 +1,5 @@
 <!-- /autoplan restore point: docs/superpowers/specs/.autoplan-restore-20260901.md -->
+
 # Design — Hold the Pen (Reviewable Actions): an agent-mediation layer for consequential forms
 
 Date: 2026-09-01 (rev 3 — APPROVED after /autoplan 4-phase dual-voice review)
@@ -32,20 +33,21 @@ carer definitions) with rules simulated; the README and Devpost text name the
 real form and state exactly which friction is reproduced and what is fictional.
 
 **Four sections, one document** (URL never changes mid-claim):
-1. Household  2. Income  3. Disability / caring (— designated cut lever)
-4. Declaration & review
 
-Content beats: ≥1 conditional branch, ≥1 confusing term (income *received* vs
-*earned*), ≥1 validation-failure path, the full fill → conflict → review →
+1. Household 2. Income 3. Disability / caring (— designated cut lever)
+2. Declaration & review
+
+Content beats: ≥1 conditional branch, ≥1 confusing term (income _received_ vs
+_earned_), ≥1 validation-failure path, the full fill → conflict → review →
 correct → approve arc.
 
 ### The three-way split (unchanged, the spine)
 
-| Layer | Actor | Rule |
-|---|---|---|
-| Understand | Agent | Read-only, unlimited |
-| Fill | Agent | Visible, attributed, revision-checked, undoable |
-| Decide | Human, in the visible UI | No WebMCP tool commits the claim |
+| Layer      | Actor                    | Rule                                            |
+| ---------- | ------------------------ | ----------------------------------------------- |
+| Understand | Agent                    | Read-only, unlimited                            |
+| Fill       | Agent                    | Visible, attributed, revision-checked, undoable |
+| Decide     | Human, in the visible UI | No WebMCP tool commits the claim                |
 
 ## 3. Tool surface — 7 tools
 
@@ -56,15 +58,15 @@ echoes user/agent text sets `untrustedContentHint: true`. All registrations via
 one manager (§4). Descriptions of tools 2–7 end with "Call get_claim_state
 first."
 
-| # | Tool | RO | Contract |
-|---|---|---|---|
-| 1 | `get_claim_state` | ✓ | Entry point. Sections, completion, empty fields, agent-filled-unreviewed list, staged-review status, `next_suggested_tools`. |
-| 2 | `explain` | ✓ | One tool, `{question_id, intent?}`, intent ∈ meaning\|term\|consequences. What the question actually asks; confusable concepts; how each truthful answer affects the (simulated) workflow. Never recommends an answer. |
-| 3 | `review_agent_entries` | ✓ | Every agent-supplied value + source + review status, capped. |
-| 4 | `fill_field` | ✗ | One field. Rejected if field is focused, dirty, or human-answered non-empty (conflict error names the remedy). Commits only if per-field revision unchanged since read. Marks agent+unreviewed. Returns validator verdict. Same-value fill is idempotent. |
-| 5 | `clear_field` | ✗ | Undo one field. Error (not failure) on empty field. |
-| 6 | `navigate_to_section` | ✗ | Moves visible form + focus. Does NOT invalidate a staged review. |
-| 7 | `prepare_submission_review` | ✗ | Description opens "Does NOT submit." Stages review, returns summary of what would be sent + commitments, or missing fields in form order. Idempotent per claim revision; any mutation invalidates the stage. |
+| #   | Tool                        | RO  | Contract                                                                                                                                                                                                                                                  |
+| --- | --------------------------- | --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | `get_claim_state`           | ✓   | Entry point. Sections, completion, empty fields, agent-filled-unreviewed list, staged-review status, `next_suggested_tools`.                                                                                                                              |
+| 2   | `explain`                   | ✓   | One tool, `{question_id, intent?}`, intent ∈ meaning\|term\|consequences. What the question actually asks; confusable concepts; how each truthful answer affects the (simulated) workflow. Never recommends an answer.                                    |
+| 3   | `review_agent_entries`      | ✓   | Every agent-supplied value + source + review status, capped.                                                                                                                                                                                              |
+| 4   | `fill_field`                | ✗   | One field. Rejected if field is focused, dirty, or human-answered non-empty (conflict error names the remedy). Commits only if per-field revision unchanged since read. Marks agent+unreviewed. Returns validator verdict. Same-value fill is idempotent. |
+| 5   | `clear_field`               | ✗   | Undo one field. Error (not failure) on empty field.                                                                                                                                                                                                       |
+| 6   | `navigate_to_section`       | ✗   | Moves visible form + focus. Does NOT invalidate a staged review.                                                                                                                                                                                          |
+| 7   | `prepare_submission_review` | ✗   | Description opens "Does NOT submit." Stages review, returns summary of what would be sent + commitments, or missing fields in form order. Idempotent per claim revision; any mutation invalidates the stage.                                              |
 
 **No commit tool — by decision, twice reviewed.** Approval is a UI-only
 ceremony (§5). The error contract for EVERY failure:
@@ -129,6 +131,7 @@ turn. README documents this as the missing primitive (#165).
 ## 5. The experience
 
 **Homepage = judge kit + preflight (one page):**
+
 1. Above the fold: live status chip ("7 agent tools registered" / degraded
    reason + fix), 3-step activation (copyable
    `chrome://flags/#enable-webmcp-testing`, "Chrome will restart", expected
@@ -211,14 +214,14 @@ silently.
 
 ## 10. Risks
 
-| Risk | Mitigation |
-|---|---|
-| Agent picks wrong tool | 7 non-overlapping tools; entry-point pattern; evals |
-| Rival entrants build the a11y angle | Moat = provenance/review depth; queue is the first thing shown everywhere |
-| Judge tests flagless | Homepage kit + replay fallback |
-| ChatGPT model gating (Luna) | README + testing instructions; Chrome is primary |
-| Hour overrun | Budget: preflight/deploy 3h · store 8h · WebMCP manager 5h · UI/a11y 9h · tests 6h · README/Devpost 3h · video 4h · contingency 3h. Build sections 1,2,4 first. |
-| False green on deploy | Preflight asserts runtime effects on production origin, day 1 |
+| Risk                                | Mitigation                                                                                                                                                      |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Agent picks wrong tool              | 7 non-overlapping tools; entry-point pattern; evals                                                                                                             |
+| Rival entrants build the a11y angle | Moat = provenance/review depth; queue is the first thing shown everywhere                                                                                       |
+| Judge tests flagless                | Homepage kit + replay fallback                                                                                                                                  |
+| ChatGPT model gating (Luna)         | README + testing instructions; Chrome is primary                                                                                                                |
+| Hour overrun                        | Budget: preflight/deploy 3h · store 8h · WebMCP manager 5h · UI/a11y 9h · tests 6h · README/Devpost 3h · video 4h · contingency 3h. Build sections 1,2,4 first. |
+| False green on deploy               | Preflight asserts runtime effects on production origin, day 1                                                                                                   |
 
 ## 11. Build order (approved)
 
@@ -232,9 +235,10 @@ silently.
 8. Video · Devpost text · TTHW stopwatch · submission
 
 ---
-*Review provenance: /autoplan, 4 phases × dual voices (Claude opus subagents +
+
+_Review provenance: /autoplan, 4 phases × dual voices (Claude opus subagents +
 raw codex exec), 33 decisions — full audit trail in
 [autoplan-audit-trail-20260901.md](autoplan-audit-trail-20260901.md); rev 2
 snapshot in [.autoplan-restore-20260901.md](.autoplan-restore-20260901.md);
 test plan in [test-plan-20260901.md](test-plan-20260901.md). U1 accepted
-(replay fallback); T1 kept (no commit tool); T2 middle cut.*
+(replay fallback); T1 kept (no commit tool); T2 middle cut._

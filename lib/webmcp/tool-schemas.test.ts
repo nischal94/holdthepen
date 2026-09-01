@@ -10,9 +10,13 @@ describe("tool schema budgets", () => {
       expect(name.length).toBeLessThanOrEqual(BUDGET.name);
       expect(schema.description.length).toBeGreaterThan(0);
       expect(schema.description.length).toBeLessThanOrEqual(BUDGET.description);
-      for (const [param, def] of Object.entries(schema.inputSchema.properties ?? {})) {
+      for (const [param, def] of Object.entries(
+        schema.inputSchema.properties ?? {}
+      )) {
         expect(param.length, `param ${param}`).toBeLessThanOrEqual(BUDGET.name);
-        expect((def.description ?? "").length).toBeLessThanOrEqual(BUDGET.paramDescription);
+        expect((def.description ?? "").length).toBeLessThanOrEqual(
+          BUDGET.paramDescription
+        );
       }
     });
   }
