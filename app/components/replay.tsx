@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   REPLAY_STEPS,
   createReplay,
+  storeHasContent,
   type ReplayController,
 } from "@/lib/claim/replay";
 import { useClaimContext } from "@/lib/react/claim-context";
@@ -12,31 +13,50 @@ import { useClaimContext } from "@/lib/react/claim-context";
  * "Watch the agent flow" — for visitors without WebMCP. Plays the scripted
  * demonstration through the real tools and shows a transcript. Clearly
  * labelled as recorded; ends with the person's own review and approval.
+ *
+ * Playing resets the form, so if the person has entered anything, the
+ * button first asks for confirmation instead of erasing their answers.
  */
 export function Replay() {
   const { store, announce } = useClaimContext();
   const [lines, setLines] = useState<{ actor: string; text: string }[]>([]);
   const [playing, setPlaying] = useState(false);
+  const [confirming, setConfirming] = useState(false);
   const ctrl = useRef<ReplayController | null>(null);
 
   useEffect(() => () => ctrl.current?.stop(), []);
 
+  /** Start, or ask first when the form already holds the person's answers. */
+  function requestPlay() {
+    if (storeHasContent(store)) {
+      setConfirming(true);
+      return;
+    }
+    void play();
+  }
+
+  /** Run the demonstration and announce its true outcome. */
   async function play() {
+    setConfirming(false);
     ctrl.current?.stop();
     ctrl.current = createReplay(store);
     setLines([]);
     setPlaying(true);
     announce("Recorded demonstration started.");
-    await ctrl.current.play((i, text) => {
+    const outcome = await ctrl.current.play((i, text) => {
       setLines((l) => [...l, { actor: REPLAY_STEPS[i].actor, text }]);
     });
     setPlaying(false);
-    announce("Recorded demonstration finished. Your turn to review.");
+    announce(
+      outcome === "finished"
+        ? "Recorded demonstration finished. Your turn to review."
+        : "Recorded demonstration stopped. The form was cleared."
+    );
   }
 
+  /** Halt the run; the controller clears the demonstration's data. */
   function stop() {
     ctrl.current?.stop();
-    setPlaying(false);
   }
 
   const label = (a: string) =>
@@ -60,29 +80,60 @@ export function Replay() {
         agent would. It resets the form and stops before approval — that part is
         yours.
       </p>
-      <div className="mt-3 flex gap-2">
-        <button
-          type="button"
-          onClick={play}
-          disabled={playing}
-          className="min-h-11 rounded bg-neutral-900 px-4 text-sm font-medium text-white disabled:bg-neutral-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+
+      {confirming ? (
+        <div
+          role="alertdialog"
+          aria-labelledby="replay-confirm"
+          className="mt-3 rounded border border-amber-700 bg-amber-50 p-3"
         >
-          {playing
-            ? "Playing…"
-            : lines.length
-              ? "Play again"
-              : "Play the demonstration"}
-        </button>
-        {playing && (
+          <p id="replay-confirm" className="text-sm font-medium">
+            Playing the demonstration clears everything you have entered so far.
+            Continue?
+          </p>
+          <div className="mt-2 flex gap-2">
+            <button
+              type="button"
+              onClick={() => void play()}
+              className="min-h-11 rounded bg-neutral-900 px-4 text-sm font-medium text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+            >
+              Clear and play
+            </button>
+            <button
+              type="button"
+              onClick={() => setConfirming(false)}
+              className="min-h-11 rounded border border-neutral-600 px-4 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+            >
+              Keep my answers
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="mt-3 flex gap-2">
           <button
             type="button"
-            onClick={stop}
-            className="min-h-11 rounded border border-neutral-600 px-4 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+            onClick={requestPlay}
+            disabled={playing}
+            className="min-h-11 rounded bg-neutral-900 px-4 text-sm font-medium text-white disabled:bg-neutral-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
           >
-            Stop
+            {playing
+              ? "Playing…"
+              : lines.length
+                ? "Play again"
+                : "Play the demonstration"}
           </button>
-        )}
-      </div>
+          {playing && (
+            <button
+              type="button"
+              onClick={stop}
+              className="min-h-11 rounded border border-neutral-600 px-4 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+            >
+              Stop
+            </button>
+          )}
+        </div>
+      )}
+
       {lines.length > 0 && (
         <ol
           role="log"

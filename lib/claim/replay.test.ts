@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { createReplay, REPLAY_STEPS } from "./replay";
+import { createReplay, REPLAY_STEPS, storeHasContent } from "./replay";
 import { CLAIM_SCHEMA } from "./schema";
 import { createClaimStore } from "./store";
 
@@ -33,14 +33,30 @@ describe("recorded demonstration", () => {
     expect(store.approve({ confirmed: true }).ok).toBe(false);
   });
 
-  it("stop() halts the run without further mutations", async () => {
+  it("stop() halts the run, reports 'stopped', and clears the partial demo data", async () => {
     const store = createClaimStore(CLAIM_SCHEMA);
     const ctrl = createReplay(store);
     const done = ctrl.play(() => {});
-    await vi.advanceTimersByTimeAsync(1000); // past the first two steps
+    await vi.advanceTimersByTimeAsync(1000); // past "you type your name"
+    expect(store.getSnapshot().fields.full_name.value).toBe("Ada King");
     ctrl.stop();
     await vi.runAllTimersAsync();
-    await done;
+    expect(await done).toBe("stopped");
+    expect(store.getSnapshot().fields.full_name.value).toBe("");
     expect(store.unreviewedIds().length).toBe(0);
+  });
+
+  it("a full run reports 'finished'", async () => {
+    const store = createClaimStore(CLAIM_SCHEMA);
+    const done = createReplay(store).play(() => {});
+    await vi.runAllTimersAsync();
+    expect(await done).toBe("finished");
+  });
+
+  it("storeHasContent is false when empty and true after any entry", () => {
+    const store = createClaimStore(CLAIM_SCHEMA);
+    expect(storeHasContent(store)).toBe(false);
+    store.humanSet("full_name", "A");
+    expect(storeHasContent(store)).toBe(true);
   });
 });

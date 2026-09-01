@@ -149,11 +149,30 @@ export const REPLAY_STEPS: ReplayStep[] = [
   },
 ];
 
+export type ReplayOutcome = "finished" | "stopped";
+
 export interface ReplayController {
-  play(onStep: (index: number, text: string) => void): Promise<void>;
+  /**
+   * Run every step in order, reporting each transcript line. Resolves with
+   * "finished" after the last step, or "stopped" if stop() was called.
+   */
+  play(onStep: (index: number, text: string) => void): Promise<ReplayOutcome>;
+  /**
+   * Halt the run and clear the demonstration's data from the store, so a
+   * partial run never lingers as if it were the person's own answers.
+   */
   stop(): void;
 }
 
+/** True when any field holds a value the person or an agent entered. */
+export function storeHasContent(store: ClaimStore): boolean {
+  return Object.values(store.getSnapshot().fields).some((f) => f.value !== "");
+}
+
+/**
+ * Build a controller bound to a store. play() resets the store, so callers
+ * must ask the person first when storeHasContent() is true.
+ */
 export function createReplay(
   store: ClaimStore,
   steps = REPLAY_STEPS
@@ -181,20 +200,24 @@ export function createReplay(
       cancelled = false;
       store.reset();
       for (let i = 0; i < steps.length; i++) {
-        if (cancelled) return;
+        if (cancelled) return "stopped";
         await wait(steps[i].delay);
-        if (cancelled) return;
+        if (cancelled) return "stopped";
         const out = steps[i].run
           ? await steps[i].run!(store, tools)
           : undefined;
+        if (cancelled) return "stopped";
         onStep(i, typeof out === "string" && out ? out : steps[i].text);
       }
+      return "finished";
     },
     stop() {
+      if (cancelled) return;
       cancelled = true;
       if (timer) clearTimeout(timer);
       release?.();
       release = null;
+      store.reset();
     },
   };
 }
