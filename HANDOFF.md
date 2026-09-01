@@ -31,43 +31,52 @@ announced (~2026-09-23). Fork to keep building.
 
 ---
 
-## Current handoff — updated 2026-09-02 01:30 IST (test loop verified end to end; NEXT: push to GitHub, Chrome-flag check, then Task 2)
+## Current handoff — updated 2026-09-02 02:40 IST (Tasks 1–4 done: store, registration manager, seven tools; NEXT: Task 5 UI)
 
-**Repo state:** local `main`, 6 commits, clean tree, **not yet on GitHub**.
-Live: https://holdthepen.vercel.app (preflight build, Vercel CLI deploys,
-project `holdthepen`). Spec rev 3 approved after a 4-phase dual-voice
-a four-lens review: `docs/superpowers/specs/2026-09-01-agent-mediated-claim-design.md`
-(+ audit trail, test plan, rev-2 snapshot alongside).
+**Repo state:** local `main`, clean tree, **not yet on GitHub**. Live:
+https://holdthepen.vercel.app (preflight build only; the claim UI is not
+deployed yet). Spec rev 3 approved:
+`docs/superpowers/specs/2026-09-01-agent-mediated-claim-design.md`; test plan
+alongside; decision log and research in `docs-private/` (untracked).
 
-**What is DONE:** preflight page + origin-isolation header, verified on the
-production origin (isolation `true`, header `?1`, honest degraded state) ·
-test loop green — format, lint, typecheck, 17 tests, coverage over the `lib/`
-trip-wire, `next build` with static prerender · typed WebMCP fake with
-prove-it-can-fail tests · executable eval validator · SHA-pinned `ci.yml` +
-`gitleaks.yml` · hooks installed (pre-commit lint-staged, pre-push check) ·
-`SECURITY.md`, `docs/REPO-SETTINGS.md` (GitHub-side checklist, judging-freeze
-rule).
+**DONE (all under test, 73 tests green, coverage ≥94% on `lib/`):**
 
-**What is NOT verified:** WebMCP tool registration in a real flagged Chrome
-(only the owner can check — the agent's browser is Chrome 148 with no
-`document.modelContext`). CI has never run (no GitHub repo yet).
+- Task 1 — preflight page + `Origin-Agent-Cluster: ?1`, verified on the
+  production origin; test loop, SHA-pinned CI, hooks, SECURITY.md,
+  `docs/REPO-SETTINGS.md`.
+- Task 2 — `lib/claim/`: store (`getSnapshot/subscribe`, no React), schema
+  (4 sections, 9 fields, one conditional), validator, per-field provenance +
+  revision, review FSM. Stale-closure guard is test row 1.
+- Task 3 — `lib/webmcp/registration-manager.ts`: registers once, allSettled,
+  ready/degraded with reasons, never unregisters, one in-flight promise.
+- Task 4 — `lib/webmcp/tools.ts`: the seven tools, error envelope, output
+  cap, annotations; `evals/claim.eval.json` validated by `evals/evals.test.ts`.
+- Public-tree hygiene audit: no former names, tool names, or quoted material
+  in tracked files (grep in the untracked local notes file).
+
+**NOT verified:** WebMCP registration in a real flagged Chrome (owner only).
+CI has never run (no GitHub repo yet).
 
 ### NEXT — in this order
 
-1. **Owner:** create the public repo and push (command in the kickoff), then
-   tick the hour-0 items in `docs/REPO-SETTINGS.md`. Confirm `ci` and
-   `gitleaks` go green on GitHub — first proof CI works from a bare VM.
-2. **Owner:** open https://holdthepen.vercel.app in Chrome 149+ with
-   `chrome://flags/#enable-webmcp-testing` enabled. Expected banner:
-   "✅ WebMCP is live on this page — 1 tool registered". Report the text.
-   This closes failure mode F7 (the last open one in the spec).
-3. **Agent — Task 2 (spec §11):** `lib/claim/` store — `getSnapshot/dispatch/
-subscribe`, per-field provenance + revision, review FSM
-   (idle → staged → invalidated | approved). **Stale-closure test first**
-   (test-plan row 1), then rows 3, 5, 9–12. No React in `lib/claim/`.
-   Acceptance: tests observed failing then passing; `./node_modules/.bin/vitest run`
-   green; coverage trip-wire holds.
-4. Then Task 3 (registration manager) → Task 4 (7 tools + error envelope) per §11.
+1. **Owner:** `gh repo create holdthepen --public --source=. --remote=origin --push`
+   (full command in the kickoff), tick hour-0 items in `docs/REPO-SETTINGS.md`,
+   confirm `ci` + `gitleaks` green.
+2. **Owner:** open https://holdthepen.vercel.app in Chrome 149+ with the flag;
+   report the banner text (expected "1 tool registered").
+3. **Agent — Task 5 (spec §5, §11):** the UI. `ClaimProvider` (client) creating
+   the store + registering the seven tools once via the manager;
+   `useSyncExternalStore` hook; sections 1, 2, 4 first (3 is the cut lever);
+   six named field states with text labels; review queue (rail / bottom
+   sheet) with Accept / Correct / Clear; approval page with the declaration
+   checkbox and submit **disabled until unreviewed = 0**; confirmation screen;
+   debounced `aria-live` announcements that never speak values; homepage =
+   judge kit + status chip. Replace the preflight page; drop `get_demo_status`.
+   Acceptance: component tests for the six states, queue, disabled-submit,
+   axe zero violations; `next build` green; deploy; owner verifies with the
+   flag.
+4. Task 6 — judge kit polish + replay fallback + two-path README.
+5. Task 7 — evals + a11y pass. Task 8 — video, Devpost text, submission.
 
 **Local tooling notes** live in an untracked file at the repo root.
 
