@@ -11,3 +11,5 @@ scripts/
 *.tsbuildinfo
 next-env.d.ts
 .vercel
+docs-private/
+CLAUDE.local.md

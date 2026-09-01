@@ -235,5 +235,5 @@ silently.
 ---
 
 _Reviewed in four passes (strategy, design, engineering, developer
-experience), each with two independent reviewers. The decision log and the
-test plan live alongside this document._
+experience), each with two independent reviewers. The test plan lives
+alongside this document._

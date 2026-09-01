@@ -69,12 +69,7 @@ subscribe`, per-field provenance + revision, review FSM
    green; coverage trip-wire holds.
 4. Then Task 3 (registration manager) → Task 4 (7 tools + error envelope) per §11.
 
-**Environment quirks (verified 2026-09-02):** `npm`/`npx` are sfw-shimmed
-inside the agent sandbox and fail — run `./node_modules/.bin/<tool>` directly;
-installs are run by the owner. Every node process prints "failed to copy trust
-settings" to stderr — noise, filter it. `.git/` and `.github/workflows/` writes
-need the sandbox disabled. Agent commits use `SKIP_SIMPLE_GIT_HOOKS=1` after
-running the same checks by hand. Local agent permissions allow git
+**Local tooling notes** live in `CLAUDE.local.md` (untracked).
 
 ### KICKOFF PROMPT for the next session
 
