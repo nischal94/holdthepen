@@ -32,7 +32,11 @@ export interface ClaimStore {
   /** Human typing. Always accepted; provenance flips to human. */
   humanSet(id: FieldId, value: string): void;
   /** Agent write. Conflict-checked, revision-checked, validated. */
-  agentFill(id: FieldId, value: string, expectedRevision?: number): Result<FieldRecord>;
+  agentFill(
+    id: FieldId,
+    value: string,
+    expectedRevision?: number
+  ): Result<FieldRecord>;
   clearField(id: FieldId): Result<FieldRecord>;
   /** Human accepts an agent-supplied value. Provenance stays agent; reviewed becomes true. */
   acceptField(id: FieldId): Result<FieldRecord>;
@@ -50,12 +54,21 @@ export interface ClaimStore {
 }
 
 function emptyRecord(id: FieldId): FieldRecord {
-  return { id, value: "", provenance: null, reviewed: false, revision: 0, error: null };
+  return {
+    id,
+    value: "",
+    provenance: null,
+    reviewed: false,
+    revision: 0,
+    error: null,
+  };
 }
 
 function initialState(schema: ClaimSchema): ClaimState {
   return {
-    fields: Object.fromEntries(schema.fields.map((f) => [f.id, emptyRecord(f.id)])),
+    fields: Object.fromEntries(
+      schema.fields.map((f) => [f.id, emptyRecord(f.id)])
+    ),
     revision: 0,
     review: { status: "idle" },
     currentSection: schema.sections[0].id,
@@ -266,7 +279,9 @@ export function createClaimStore(schema: ClaimSchema): ClaimStore {
     missingRequiredIds() {
       return schema.fields
         .filter((f) => f.required && isVisible(f.id))
-        .filter((f) => state.fields[f.id].value === "" || state.fields[f.id].error)
+        .filter(
+          (f) => state.fields[f.id].value === "" || state.fields[f.id].error
+        )
         .map((f) => f.id);
     },
 
@@ -285,13 +300,17 @@ export function createClaimStore(schema: ClaimSchema): ClaimStore {
         return err({
           code: "MISSING_REQUIRED",
           problem: `${missing.length} required field(s) are missing or invalid: ${missing.join(", ")}.`,
-          cause: "Every required visible field must hold a valid value before review.",
+          cause:
+            "Every required visible field must hold a valid value before review.",
           fix: `Fill these in form order: ${missing.join(", ")}.`,
           retryable: true,
         });
       }
       // Idempotent per claim revision: re-staging the same revision reuses the stage.
-      if (state.review.status === "staged" && state.review.claimRevision === state.revision) {
+      if (
+        state.review.status === "staged" &&
+        state.review.claimRevision === state.revision
+      ) {
         return { ok: true, value: summary(state.review.reviewId) };
       }
       const reviewId = nextReviewId();
@@ -318,12 +337,16 @@ export function createClaimStore(schema: ClaimSchema): ClaimStore {
         return err({
           code: "REVIEW_NOT_STAGED",
           problem: "No review has been staged.",
-          cause: "Approval requires a staged review of the exact answers being sent.",
+          cause:
+            "Approval requires a staged review of the exact answers being sent.",
           fix: "Stage a review first.",
           retryable: true,
         });
       }
-      if (review.status === "invalidated" || review.claimRevision !== state.revision) {
+      if (
+        review.status === "invalidated" ||
+        review.claimRevision !== state.revision
+      ) {
         return err({
           code: "REVIEW_INVALIDATED",
           problem: "The claim changed after the review was staged.",
@@ -337,7 +360,8 @@ export function createClaimStore(schema: ClaimSchema): ClaimStore {
         return err({
           code: "UNREVIEWED_ENTRIES",
           problem: `${unreviewed.length} agent-filled field(s) have not been reviewed: ${unreviewed.join(", ")}.`,
-          cause: "Every agent-supplied value must be accepted or corrected by the person.",
+          cause:
+            "Every agent-supplied value must be accepted or corrected by the person.",
           fix: "The person reviews them in the review queue; there is no tool for this.",
           retryable: true,
         });

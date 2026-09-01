@@ -58,7 +58,12 @@ export type ReviewState =
   | { status: "idle" }
   | { status: "staged"; reviewId: string; claimRevision: number }
   | { status: "invalidated"; reviewId: string; claimRevision: number }
-  | { status: "approved"; reviewId: string; claimRevision: number; reference: string };
+  | {
+      status: "approved";
+      reviewId: string;
+      claimRevision: number;
+      reference: string;
+    };
 
 export interface ClaimState {
   fields: Record<FieldId, FieldRecord>;
@@ -91,11 +96,17 @@ export interface ToolError {
   retryable: boolean;
 }
 
-export type Result<T> = { ok: true; value: T } | { ok: false; error: ToolError };
+export type Result<T> =
+  { ok: true; value: T } | { ok: false; error: ToolError };
 
 export interface StagedSummary {
   reviewId: string;
   claimRevision: number;
-  entries: { id: FieldId; label: string; value: string; provenance: Provenance }[];
+  entries: {
+    id: FieldId;
+    label: string;
+    value: string;
+    provenance: Provenance;
+  }[];
   commitments: string[];
 }

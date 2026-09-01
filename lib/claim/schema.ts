@@ -39,7 +39,8 @@ export const CLAIM_SCHEMA: ClaimSchema = {
       required: true,
       maxLength: 120,
       explain: {
-        meaning: "Your name exactly as it appears on official identity documents.",
+        meaning:
+          "Your name exactly as it appears on official identity documents.",
         consequences:
           "A mismatch with identity records delays the claim; it does not change the award.",
       },
@@ -107,7 +108,8 @@ export const CLAIM_SCHEMA: ClaimSchema = {
       kind: "number",
       required: false,
       explain: {
-        meaning: "Pay or invoices for last month's work that had not arrived by the end of the month.",
+        meaning:
+          "Pay or invoices for last month's work that had not arrived by the end of the month.",
         consequences:
           "Not counted this month. It counts in the month it arrives, so keep the record to avoid a later overpayment notice.",
       },
@@ -121,7 +123,8 @@ export const CLAIM_SCHEMA: ClaimSchema = {
       explain: {
         meaning:
           "A physical or mental condition lasting, or expected to last, 12 months or more.",
-        consequences: "A qualifying condition adds a supplement to the allowance.",
+        consequences:
+          "A qualifying condition adds a supplement to the allowance.",
       },
     },
     {
