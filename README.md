@@ -134,4 +134,4 @@ npm run check      # format, lint, typecheck, tests
 npm run ci         # check + coverage + production build
 ```
 
-Built with Next.js, TypeScript, and Tailwind. MIT licensed.
+Built with Next.js, TypeScript, and Tailwind. MIT-licensed.
