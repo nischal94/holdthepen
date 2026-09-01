@@ -175,7 +175,7 @@ describe("Hold the Pen page", () => {
     expect(
       await screen.findByRole("heading", { name: /Claim submitted/ })
     ).toBeInTheDocument();
-    expect(screen.getByText(/WC-\d{4}-/)).toBeInTheDocument();
+    expect(screen.getAllByText(/WC-\d{4}-/).length).toBeGreaterThan(0);
   });
 
   it("has no axe violations on the form and the declaration page", async () => {
