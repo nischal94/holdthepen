@@ -172,7 +172,9 @@ describe("Hold the Pen page", () => {
     await userEvent.click(screen.getByRole("checkbox"));
     expect(submit).toBeEnabled();
     await userEvent.click(submit);
-    expect(await screen.findByText(/Claim submitted/)).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", { name: /Claim submitted/ })
+    ).toBeInTheDocument();
     expect(screen.getByText(/WC-\d{4}-/)).toBeInTheDocument();
   });
 
