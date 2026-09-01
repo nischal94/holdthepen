@@ -59,6 +59,7 @@ function emptyRecord(id: FieldId): FieldRecord {
     value: "",
     provenance: null,
     reviewed: false,
+    corrected: false,
     revision: 0,
     error: null,
   };
@@ -141,12 +142,13 @@ export function createClaimStore(schema: ClaimSchema): ClaimStore {
       const def = defs.get(id);
       if (!def) return;
       const cur = state.fields[id];
-      const clean = sanitize(def, value);
+      const clean = sanitize(def, value, false);
       commitField({
         ...cur,
         value: clean,
         provenance: "human",
         reviewed: true,
+        corrected: cur.corrected || cur.provenance === "agent",
         revision: cur.revision + 1,
         error: validateField(def, clean),
       });

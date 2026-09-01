@@ -1,52 +1,186 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { axe } from "jest-axe";
 import { afterEach, describe, expect, it } from "vitest";
-import PreflightPage from "./page";
-import { installFakeModelContext } from "../test/mock-model-context";
+import HomePage from "./page";
+import { FIELD_STATE_LABEL } from "@/lib/claim/copy";
+import {
+  FakeModelContext,
+  installFakeModelContext,
+} from "../test/mock-model-context";
 
-describe("Preflight page", () => {
-  let restore: (() => void) | undefined;
-  afterEach(() => {
-    restore?.();
-    restore = undefined;
-  });
+let restore: (() => void) | undefined;
+afterEach(() => {
+  restore?.();
+  restore = undefined;
+  sessionStorage.clear();
+});
 
-  it("degrades honestly when WebMCP is absent: instructions, not a blank page", async () => {
-    render(<PreflightPage />);
+async function withAgent() {
+  const installed = installFakeModelContext("document");
+  restore = installed.restore;
+  render(<HomePage />);
+  await waitFor(() =>
+    expect(
+      screen.getByRole("status", { name: "Agent tools status" })
+    ).toHaveTextContent(/7 agent tools registered/)
+  );
+  return installed.fake;
+}
+
+async function agentCall(fake: FakeModelContext, name: string, input: object) {
+  const tool = (await fake.getTools()).find((t) => t.name === name)!;
+  return JSON.parse(
+    String(await fake.executeTool(tool, JSON.stringify(input)))
+  );
+}
+
+describe("Hold the Pen page", () => {
+  it("without WebMCP: shows the activation steps and stays usable by hand", async () => {
+    render(<HomePage />);
     await waitFor(() =>
-      expect(screen.getByRole("status")).toHaveTextContent(/not active/i)
+      expect(screen.getByText(/Agent tools unavailable/)).toBeInTheDocument()
     );
     expect(
-      screen.getByText(/chrome:\/\/flags\/#enable-webmcp-testing/)
-    ).toBeVisible();
-    expect(screen.getByText(/API absent/i)).toBeInTheDocument();
+      screen.getAllByText(/chrome:\/\/flags\/#enable-webmcp-testing/).length
+    ).toBeGreaterThan(0);
+    const name = screen.getByLabelText(/Full legal name/);
+    await userEvent.type(name, "Ada King");
+    expect(screen.getByText(FIELD_STATE_LABEL.human)).toBeInTheDocument();
   });
 
-  it("registers exactly one tool when the API exists and reports it green", async () => {
-    const installed = installFakeModelContext("document");
-    // The banner turns green only with origin isolation AND a working API,
-    // the same two runtime facts the deployed preflight asserts. jsdom has
-    // neither by default, so simulate isolation here.
-    Object.defineProperty(window, "originAgentCluster", {
-      value: true,
-      configurable: true,
+  it("registers exactly the seven tools once (StrictMode-safe)", async () => {
+    const fake = await withAgent();
+    expect([...fake.tools.keys()].sort()).toEqual([
+      "clear_field",
+      "explain",
+      "fill_field",
+      "get_claim_state",
+      "navigate_to_section",
+      "prepare_submission_review",
+      "review_agent_entries",
+    ]);
+    expect(fake.registrationAttempts.length).toBe(7);
+    expect(fake.unregistered).toEqual([]);
+  });
+
+  it("an agent fill shows the unreviewed badge, lands in the queue, announces without the value, and Accept resolves it", async () => {
+    const fake = await withAgent();
+    const r = await agentCall(fake, "fill_field", {
+      field_id: "household_size",
+      value: "2",
     });
-    restore = () => {
-      installed.restore();
-      delete (window as { originAgentCluster?: boolean }).originAgentCluster;
-    };
-    render(<PreflightPage />);
+    expect(r.ok).toBe(true);
+    const field = document.querySelector('[data-field="household_size"]')!;
     await waitFor(() =>
-      expect(screen.getByRole("status")).toHaveTextContent(/1 tool registered/)
+      expect(
+        within(field as HTMLElement).getByText(
+          FIELD_STATE_LABEL.agentUnreviewed
+        )
+      ).toBeInTheDocument()
     );
-    expect(installed.fake.registrationAttempts).toEqual(["get_demo_status"]);
-    expect([...installed.fake.tools.keys()]).toEqual(["get_demo_status"]);
-    expect(installed.fake.unregistered).toEqual([]);
+    const queue = screen.getByRole("complementary", {
+      name: /Review what the agent filled/,
+    });
+    expect(
+      within(queue).getByText(/1 entry needs your review/)
+    ).toBeInTheDocument();
+
+    // Announcement names the field, never the value.
+    await waitFor(() => {
+      const live = document.querySelector(".sr-only[aria-live]")!;
+      expect(live.textContent).toMatch(/How many people live/);
+      expect(live.textContent).not.toMatch(/\b2\b/);
+    });
+
+    await userEvent.click(
+      within(queue).getByRole("button", { name: "Accept" })
+    );
+    expect(
+      within(field as HTMLElement).getByText(FIELD_STATE_LABEL.agentReviewed)
+    ).toBeInTheDocument();
+    expect(
+      within(queue).getByText(/Nothing from the agent to review/)
+    ).toBeInTheDocument();
   });
 
-  it("has no axe-detectable accessibility violations in the degraded state", async () => {
-    const { container } = render(<PreflightPage />);
-    await waitFor(() => expect(screen.getByRole("status")).toBeInTheDocument());
-    expect(await axe(container)).toHaveNoViolations();
+  it("an agent cannot overwrite what the person typed", async () => {
+    const fake = await withAgent();
+    await userEvent.type(screen.getByLabelText(/Full legal name/), "Ada King");
+    // While the person is still in the field, the focus guard fires first.
+    const whileEditing = await agentCall(fake, "fill_field", {
+      field_id: "full_name",
+      value: "Bob",
+    });
+    expect(whileEditing.error.code).toBe("CONFLICT_FOCUSED");
+    await userEvent.tab();
+    const r = await agentCall(fake, "fill_field", {
+      field_id: "full_name",
+      value: "Bob",
+    });
+    expect(r.ok).toBe(false);
+    expect(r.error.code).toBe("CONFLICT_HUMAN_VALUE");
+    expect(screen.getByLabelText(/Full legal name/)).toHaveValue("Ada King");
+  });
+
+  it("submit stays disabled until every agent entry is reviewed and the declaration is ticked", async () => {
+    const fake = await withAgent();
+    const answers: Record<string, string> = {
+      full_name: "Ada King",
+      date_of_birth: "1990-12-10",
+      household_size: "2",
+      employment_status: "employed",
+      income_received_last_month: "1450",
+      has_disability: "false",
+      is_carer: "false",
+    };
+    for (const [id, value] of Object.entries(answers)) {
+      expect(
+        (await agentCall(fake, "fill_field", { field_id: id, value })).ok
+      ).toBe(true);
+    }
+    const staged = await agentCall(fake, "prepare_submission_review", {});
+    expect(staged.submitted).toBe(false);
+
+    await agentCall(fake, "navigate_to_section", { section: "declaration" });
+    const submit = await screen.findByRole("button", {
+      name: /Submit my claim/,
+    });
+    expect(submit).toBeDisabled();
+    expect(
+      screen.getByText(/7 agent-filled entries have not been reviewed/)
+    ).toBeInTheDocument();
+
+    // The person accepts every entry (this invalidates the stage, by design).
+    const queue = screen.getByRole("complementary", {
+      name: /Review what the agent filled/,
+    });
+    for (let i = 0; i < 7; i++) {
+      await userEvent.click(
+        within(queue).getAllByRole("button", { name: "Accept" })[0]
+      );
+    }
+    expect(submit).toBeDisabled();
+    expect(
+      screen.getByRole("button", { name: /prepare again/i })
+    ).toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole("button", { name: /prepare again/i })
+    );
+    expect(submit).toBeDisabled(); // declaration not ticked
+    await userEvent.click(screen.getByRole("checkbox"));
+    expect(submit).toBeEnabled();
+    await userEvent.click(submit);
+    expect(await screen.findByText(/Claim submitted/)).toBeInTheDocument();
+    expect(screen.getByText(/WC-\d{4}-/)).toBeInTheDocument();
+  });
+
+  it("has no axe violations on the form and the declaration page", async () => {
+    const fake = await withAgent();
+    expect(await axe(document.body)).toHaveNoViolations();
+    await agentCall(fake, "navigate_to_section", { section: "declaration" });
+    await screen.findByRole("heading", { name: /Check and declare/ });
+    expect(await axe(document.body)).toHaveNoViolations();
   });
 });

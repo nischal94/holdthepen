@@ -3,9 +3,14 @@ import type { FieldDef } from "./types";
 const CONTROL_CHARS = /[\u0000-\u001f\u007f]/g;
 export const DEFAULT_MAX_LENGTH = 200;
 
-/** Strip control characters and enforce the per-field length cap. */
-export function sanitize(def: FieldDef, raw: string): string {
-  const cleaned = String(raw).replace(CONTROL_CHARS, "").trim();
+/**
+ * Strip control characters and enforce the per-field length cap. Human input
+ * is never trimmed while typing (a controlled input would eat the space in
+ * "Ada King"); agent input is trimmed.
+ */
+export function sanitize(def: FieldDef, raw: string, trim = true): string {
+  const stripped = String(raw).replace(CONTROL_CHARS, "");
+  const cleaned = trim ? stripped.trim() : stripped;
   const cap = def.maxLength ?? DEFAULT_MAX_LENGTH;
   return cleaned.length > cap ? cleaned.slice(0, cap) : cleaned;
 }
@@ -14,7 +19,8 @@ export function sanitize(def: FieldDef, raw: string): string {
  * Validate strictly in code, loosely in schema. Returns a human-readable
  * problem or null. Descriptive enough that a model can self-correct.
  */
-export function validateField(def: FieldDef, value: string): string | null {
+export function validateField(def: FieldDef, raw: string): string | null {
+  const value = raw.trim();
   if (value === "") {
     return def.required ? `${def.label} is required.` : null;
   }

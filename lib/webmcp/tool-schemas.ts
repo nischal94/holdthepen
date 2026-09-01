@@ -127,13 +127,6 @@ export const TOOL_SCHEMAS: Record<string, ToolSchema> = {
     untrustedContent: true,
     inputSchema: { type: "object", properties: {} },
   },
-  get_demo_status: {
-    description:
-      "Reports the preflight status of this WebMCP demo page: which checks passed and how many times an agent has called this tool. Read-only.",
-    readOnly: true,
-    untrustedContent: false,
-    inputSchema: { type: "object", properties: {} },
-  },
 };
 
 export const CLAIM_TOOL_NAMES = [

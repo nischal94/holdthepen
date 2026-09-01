@@ -49,6 +49,8 @@ export interface FieldRecord {
   provenance: Provenance | null;
   /** Meaningful only for agent-supplied values; human values are implicitly reviewed. */
   reviewed: boolean;
+  /** True once the person has overwritten an agent-supplied value. */
+  corrected: boolean;
   /** Bumped on every write to this field. Agent writes are revision-checked. */
   revision: number;
   error: string | null;
