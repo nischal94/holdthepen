@@ -1,6 +1,6 @@
-# Reviewable Actions
+# Hold the Pen
 
-An agent-mediation layer for consequential forms, built on
+**You hold the pen.** An agent-mediation layer for consequential forms, built on
 [WebMCP](https://webmachinelearning.github.io/webmcp/) for the WebMCP
 Challenge. An AI agent can read, explain, and fill a benefits-style claim
 while the person keeps every decision: agent-supplied values stay attributed

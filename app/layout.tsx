@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Reviewable Actions — WebMCP preflight",
+  title: "Hold the Pen — WebMCP preflight",
   description:
-    "Agent-mediation layer for consequential forms. Preflight build.",
+    "You hold the pen. An agent-mediation layer for consequential forms. Preflight build.",
 };
 
 export default function RootLayout({

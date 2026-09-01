@@ -1,5 +1,5 @@
 <!-- /autoplan restore point: docs/superpowers/specs/.autoplan-restore-20260901.md -->
-# Design — Reviewable Actions: an agent-mediation layer for consequential forms
+# Design — Hold the Pen (Reviewable Actions): an agent-mediation layer for consequential forms
 
 Date: 2026-09-01 (rev 3 — APPROVED after /autoplan 4-phase dual-voice review)
 Deadline: 2026-09-03 13:00 PT (2026-09-04 01:30 IST)

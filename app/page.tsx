@@ -79,7 +79,7 @@ export default function PreflightPage() {
           annotations: { readOnlyHint: true, untrustedContentHint: false },
           execute: async () => {
             setState((s) => ({ ...s, demoCallCount: s.demoCallCount + 1 }));
-            return "Preflight OK. WebMCP tool execution works on this page. This is a deploy-verification build; the full Reviewable Actions claim form is under construction.";
+            return "Preflight OK. WebMCP tool execution works on this page. This is a deploy-verification build of Hold the Pen; the full claim form is under construction.";
           },
         });
         registration = "pass";
@@ -134,7 +134,7 @@ export default function PreflightPage() {
   return (
     <main className="mx-auto max-w-2xl px-6 py-12">
       <p className="text-sm font-medium uppercase tracking-wide text-neutral-500">
-        Reviewable Actions · deploy verification
+        Hold the Pen · deploy verification
       </p>
       <h1 className="mt-2 text-3xl font-semibold">WebMCP preflight</h1>
 
@@ -234,9 +234,9 @@ export default function PreflightPage() {
       </section>
 
       <p className="mt-10 border-t border-neutral-300 pt-4 text-sm text-neutral-500">
-        This page is the day-one deploy verification for Reviewable Actions —
-        an agent-mediation layer for consequential forms, built for the WebMCP
-        Challenge. The claim form arrives next.
+        This page is the day-one deploy verification for Hold the Pen — an
+        agent fills the form, you hold the pen. Built for the WebMCP Challenge.
+        The claim form arrives next.
       </p>
     </main>
   );

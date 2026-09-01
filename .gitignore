@@ -10,3 +10,4 @@ scripts/
 .claude/
 *.tsbuildinfo
 next-env.d.ts
+.vercel
