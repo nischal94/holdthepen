@@ -53,6 +53,20 @@ describe("recorded demonstration", () => {
     expect(await done).toBe("finished");
   });
 
+  it("stop() after a finished run leaves the person's review state untouched", async () => {
+    const store = createClaimStore(CLAIM_SCHEMA);
+    const ctrl = createReplay(store);
+    const done = ctrl.play(() => {});
+    await vi.runAllTimersAsync();
+    expect(await done).toBe("finished");
+    store.acceptField("household_size");
+    ctrl.stop(); // e.g. component unmount or "Play again"
+    expect(store.getSnapshot().fields.household_size).toMatchObject({
+      value: "2",
+      reviewed: true,
+    });
+  });
+
   it("storeHasContent is false when empty and true after any entry", () => {
     const store = createClaimStore(CLAIM_SCHEMA);
     expect(storeHasContent(store)).toBe(false);

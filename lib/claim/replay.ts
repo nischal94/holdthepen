@@ -181,6 +181,7 @@ export function createReplay(
     createClaimTools(store).map((t) => [t.name, t])
   );
   let cancelled = false;
+  let finished = false;
   let timer: ReturnType<typeof setTimeout> | null = null;
   let release: (() => void) | null = null;
 
@@ -198,6 +199,7 @@ export function createReplay(
   return {
     async play(onStep) {
       cancelled = false;
+      finished = false;
       store.reset();
       for (let i = 0; i < steps.length; i++) {
         if (cancelled) return "stopped";
@@ -209,10 +211,13 @@ export function createReplay(
         if (cancelled) return "stopped";
         onStep(i, typeof out === "string" && out ? out : steps[i].text);
       }
+      finished = true;
       return "finished";
     },
     stop() {
-      if (cancelled) return;
+      // After a finished run the store holds the person's review-in-progress;
+      // stopping then must not touch it.
+      if (cancelled || finished) return;
       cancelled = true;
       if (timer) clearTimeout(timer);
       release?.();
