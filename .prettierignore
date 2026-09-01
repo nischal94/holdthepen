@@ -1,0 +1,6 @@
+node_modules
+.next
+.vercel
+coverage
+package-lock.json
+docs/superpowers/specs/.autoplan-restore-20260901.md

@@ -1,6 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import {
+  describeModelContextLocation,
+  getModelContext,
+} from "@/lib/webmcp/get-model-context";
+import { TOOL_SCHEMAS } from "@/lib/webmcp/tool-schemas";
 
 type CheckStatus = "pending" | "pass" | "fail";
 
@@ -16,12 +21,6 @@ interface PreflightState {
 }
 
 const FLAG_URL = "chrome://flags/#enable-webmcp-testing";
-
-function getModelContext(): WebMcpModelContext | undefined {
-  // The getter moved from navigator to document (~Chrome 150 deprecates the
-  // old name). Prefer the current location, fall back to the alias.
-  return document.modelContext ?? navigator.modelContext;
-}
 
 export default function PreflightPage() {
   const [state, setState] = useState<PreflightState>({
@@ -45,11 +44,7 @@ export default function PreflightPage() {
         : "fail";
 
       const mc = getModelContext();
-      const apiLocation = document.modelContext
-        ? "document.modelContext"
-        : navigator.modelContext
-          ? "navigator.modelContext (deprecated alias)"
-          : "absent";
+      const apiLocation = describeModelContextLocation();
 
       if (!mc) {
         if (!cancelled) {
@@ -71,12 +66,12 @@ export default function PreflightPage() {
         // Await the registration promise: it REJECTS on duplicate/empty name
         // or a bad schema, and an unawaited rejection means the tool silently
         // does not exist.
+        const schema = TOOL_SCHEMAS.get_demo_status;
         await mc.registerTool({
           name: "get_demo_status",
-          description:
-            "Reports the preflight status of this WebMCP demo page: which checks passed and how many times an agent has called this tool. Read-only.",
-          inputSchema: { type: "object", properties: {} },
-          annotations: { readOnlyHint: true, untrustedContentHint: false },
+          description: schema.description,
+          inputSchema: schema.inputSchema,
+          annotations: { readOnlyHint: schema.readOnly, untrustedContentHint: false },
           execute: async () => {
             setState((s) => ({ ...s, demoCallCount: s.demoCallCount + 1 }));
             return "Preflight OK. WebMCP tool execution works on this page. This is a deploy-verification build of Hold the Pen; the full claim form is under construction.";
