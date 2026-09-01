@@ -1,6 +1,6 @@
 # Handoff — Hold the Pen
 
-The baton between sessions. **Protocol (ported from conduit-HQ):**
+The baton between sessions. **Protocol:**
 
 1. **Session start:** read this file first, then whatever it points to. Do not
    re-derive project state from scratch.
