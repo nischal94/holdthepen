@@ -41,7 +41,7 @@ export function ClaimForm() {
   const idx = sections.findIndex((s) => s.id === current);
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8 lg:px-6">
+    <div className="mx-auto max-w-5xl px-4 pt-8 pb-36 lg:px-6 lg:pb-8">
       <p className="sr-only" aria-live="polite" aria-atomic="true">
         {announcement}
       </p>
@@ -98,14 +98,14 @@ export function ClaimForm() {
         aria-label="Claim sections"
         className="sticky top-0 z-10 mb-6 border-b border-neutral-300 bg-[#f8f7f4] py-2"
       >
-        <ol className="flex flex-wrap gap-2">
+        <ol className="-mx-1 flex gap-2 overflow-x-auto px-1 py-1 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0">
           {sections.map((s, i) => (
-            <li key={s.id}>
+            <li key={s.id} className="shrink-0">
               <button
                 type="button"
                 onClick={() => go(s.id)}
                 aria-current={s.id === current ? "step" : undefined}
-                className={`min-h-11 rounded px-3 text-sm font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 ${
+                className={`min-h-11 rounded px-3 text-sm font-medium whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 ${
                   s.id === current
                     ? "bg-neutral-900 text-white"
                     : "border border-neutral-500 hover:bg-neutral-200"
@@ -161,7 +161,7 @@ export function ClaimForm() {
             </section>
           )}
         </main>
-        <div className="lg:sticky lg:top-16 lg:self-start">
+        <div className="lg:sticky lg:top-20 lg:self-start">
           <ReviewQueue />
         </div>
       </div>

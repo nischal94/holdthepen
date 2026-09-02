@@ -178,6 +178,46 @@ describe("Hold the Pen page", () => {
     expect(screen.getAllByText(/WC-\d{4}-/).length).toBeGreaterThan(0);
   });
 
+  it("the review queue toggles between a collapsed bar and an open sheet", async () => {
+    await withAgent();
+    const queue = screen.getByRole("complementary", {
+      name: /Review what the agent filled/,
+    });
+    const toggle = within(queue).getByRole("button", {
+      name: /Show agent entries/,
+    });
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    expect(queue).toHaveAttribute("data-open", "false");
+    await userEvent.click(toggle);
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
+    expect(toggle).toHaveAccessibleName(/Hide agent entries/);
+    expect(queue).toHaveAttribute("data-open", "true");
+    await userEvent.click(toggle);
+    expect(queue).toHaveAttribute("data-open", "false");
+  });
+
+  it("Correct closes the sheet and moves focus to the field", async () => {
+    const fake = await withAgent();
+    await agentCall(fake, "fill_field", {
+      field_id: "household_size",
+      value: "2",
+    });
+    const queue = screen.getByRole("complementary", {
+      name: /Review what the agent filled/,
+    });
+    await userEvent.click(
+      within(queue).getByRole("button", { name: /Show agent entries/ })
+    );
+    expect(queue).toHaveAttribute("data-open", "true");
+    await userEvent.click(
+      within(queue).getByRole("button", { name: "Correct" })
+    );
+    expect(queue).toHaveAttribute("data-open", "false");
+    await waitFor(() =>
+      expect(screen.getByLabelText(/How many people live/)).toHaveFocus()
+    );
+  });
+
   it("has no axe violations on the form and the declaration page", async () => {
     const fake = await withAgent();
     expect(await axe(document.body)).toHaveNoViolations();
