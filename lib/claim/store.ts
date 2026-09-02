@@ -16,7 +16,7 @@ import { sanitize, validateField } from "./validate";
  * The claim store. Plain TypeScript, no React.
  *
  * WebMCP tool callbacks are registered once and never re-registered, so they
- * must read state through getSnapshot() at call time — never through a
+ * must read state through getSnapshot() at call time, never through a
  * closure over React state, which would be frozen at mount. React renders
  * via useSyncExternalStore(subscribe, getSnapshot).
  */

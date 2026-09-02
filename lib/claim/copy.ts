@@ -6,8 +6,8 @@
 export const FIELD_STATE_LABEL = {
   empty: "Not answered yet",
   human: "Entered by you",
-  agentUnreviewed: "Filled by the agent — not yet reviewed",
-  agentReviewed: "Filled by the agent — reviewed by you",
+  agentUnreviewed: "Filled by the agent, not yet reviewed",
+  agentReviewed: "Filled by the agent, reviewed by you",
   corrected: "Corrected by you",
   invalid: "Needs a fix",
 } as const;
@@ -41,7 +41,7 @@ export const COPY = {
     prompts: [
       "Explain the income question on this form before I answer it.",
       "Fill in the household section for me: I'm Ada King, born 1990-12-10, two of us at home.",
-      "Everything is filled in — get it ready for me to check.",
+      "Everything is filled in. Get it ready for me to check.",
     ],
     copy: "Copy",
     copied: "Copied",
@@ -79,7 +79,7 @@ export const COPY = {
     intro:
       "Read every answer below. Anything the agent filled is marked and must be accepted or corrected before you can submit.",
     prepare: "Prepare my answers for review",
-    reprepare: "Answers changed — prepare again",
+    reprepare: "Answers changed. Prepare again",
     declaration:
       "I have reviewed these answers and confirm they are true and complete.",
     submit: "Submit my claim",

@@ -1,7 +1,7 @@
 import type { ClaimSchema, FieldDef, FieldId } from "./types";
 
 /**
- * Wendell County Household Support Allowance — fictional programme. Question
+ * Wendell County Household Support Allowance, a fictional programme. Question
  * wording and the confusion points are modelled on real UK benefit forms
  * (income *received* vs *earned*, capital thresholds, carer hours); the
  * rules are simulated. Content is data: sections can be cut without
@@ -17,7 +17,7 @@ export const CLAIM_SCHEMA: ClaimSchema = {
     {
       id: "income",
       title: "Money coming in",
-      purpose: "What you received last month — not what you were owed.",
+      purpose: "What you received last month, not what you were owed.",
     },
     {
       id: "caring",
@@ -64,7 +64,7 @@ export const CLAIM_SCHEMA: ClaimSchema = {
       required: true,
       explain: {
         meaning:
-          "Everyone who normally lives at your address and shares meals or bills — not lodgers who pay rent.",
+          "Everyone who normally lives at your address and shares meals or bills, not lodgers who pay rent.",
         term: "Household: people living with you as one unit, not just people at the same address.",
         consequences:
           "A larger household raises the allowance ceiling. Counting a lodger as household can be treated as a false statement.",

@@ -35,7 +35,7 @@ describe("registration manager (test plan rows 2, 13)", () => {
     expect(fake.registrationAttempts).toEqual(["b_tool", "a_tool"]);
   });
 
-  it("surfaces a rejected registration as degraded with the reason — never a silent gap", async () => {
+  it("surfaces a rejected registration as degraded with the reason, never a silent gap", async () => {
     const fake = new FakeModelContext();
     const m = createRegistrationManager(() => fake);
     const s = await m.registerAll([

@@ -3,7 +3,7 @@
 **An agent can fill the form. You hold the pen.**
 
 A benefits-style claim form that an AI agent can read, explain, and fill
-through [WebMCP](https://webmachinelearning.github.io/webmcp/) tools — while
+through [WebMCP](https://webmachinelearning.github.io/webmcp/) tools, while
 every value the agent writes stays marked, reviewable, and undoable, and no
 tool can submit the claim. Approval is a control on the page that only the
 person can use.
@@ -14,7 +14,7 @@ person can use.
 
 ## Why this exists
 
-Consequential forms — benefits, insurance, immigration — are long,
+Consequential forms (benefits, insurance, immigration) are long,
 conditional, and written in a language of their own. The hard part is rarely
 typing; it is understanding what a question actually asks and what each
 answer commits you to. An agent that can _explain_ a form and _fill_ it is
@@ -27,7 +27,7 @@ DOM. Hold the Pen uses that to draw a hard line:
 
 | Layer      | Who    | Rule                                                                 |
 | ---------- | ------ | -------------------------------------------------------------------- |
-| Understand | Agent  | Explain any question — meaning, terms, consequences. Read-only.      |
+| Understand | Agent  | Explain any question: meaning, terms, consequences. Read-only.       |
 | Fill       | Agent  | Write values that are attributed, revision-checked, and undoable.    |
 | Decide     | Person | Review every agent entry, tick the declaration, submit. No tool can. |
 
@@ -39,19 +39,19 @@ DOM. Hold the Pen uses that to draw a hard line:
    - the ChatGPT desktop app's built-in browser (site tools work by default).
 2. **Open https://holdthepen.vercel.app.** The status chip in the "Try it
    with an agent" box should read **7 agent tools registered**. If it says
-   "unavailable", the flag did not take — enable it again and relaunch.
+   "unavailable", the flag did not take. Enable it again and relaunch.
 3. **Talk to an agent that can see the page** (the ChatGPT browser's "Site
    tools", or Chrome with a WebMCP-capable agent extension) and use the three
    prompts on the page. What you should see:
 
-   | Prompt                                                                                    | Expected                                                                                                     |
-   | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-   | "Explain the income question on this form before I answer it."                            | A plain-language explanation of _received_ vs _earned_ income. No field changes.                             |
-   | "Fill in the household section for me: I'm Ada King, born 1990-12-10, two of us at home." | Three fields fill, each badged **Filled by the agent — not yet reviewed**; the review queue shows 3 entries. |
-   | "Everything is filled in — get it ready for me to check."                                 | The agent reports which required fields are still missing. Nothing is submitted.                             |
+   | Prompt                                                                                    | Expected                                                                                                    |
+   | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+   | "Explain the income question on this form before I answer it."                            | A plain-language explanation of _received_ vs _earned_ income. No field changes.                            |
+   | "Fill in the household section for me: I'm Ada King, born 1990-12-10, two of us at home." | Three fields fill, each badged **Filled by the agent, not yet reviewed**; the review queue shows 3 entries. |
+   | "Everything is filled in. Get it ready for me to check."                                  | The agent reports which required fields are still missing. Nothing is submitted.                            |
 
 4. **Try to break the line.** Type into a field yourself, then ask the agent
-   to change it — it refuses (`CONFLICT_HUMAN_VALUE`). Ask it to submit — there
+   to change it. It refuses (`CONFLICT_HUMAN_VALUE`). Ask it to submit: there
    is no tool for that; it can only prepare a review. Go to **Check and
    declare**: the submit button stays disabled, and says why, until every
    agent entry is accepted or corrected and the declaration is ticked.
@@ -80,10 +80,10 @@ can correct itself. Details: [docs/DESIGN.md](docs/DESIGN.md).
 
 ## What makes it accessible
 
-- Every field state is a **text label** ("Filled by the agent — not yet
+- Every field state is a **text label** ("Filled by the agent, not yet
   reviewed"), exposed to assistive technology, never only a colour.
 - Agent writes produce one polite live-region announcement naming the fields
-  that changed — **never the values** (speech output should not read your
+  that changed, **never the values** (speech output should not read your
   income to the room).
 - The review queue, approval page, and every control are keyboard-reachable
   with visible focus and 44 px targets; the submit control explains in text
@@ -93,15 +93,15 @@ can correct itself. Details: [docs/DESIGN.md](docs/DESIGN.md).
 
 The mediation layer is independent of this form:
 
-- `lib/claim/store.ts` — a plain-TypeScript store with per-field provenance,
+- `lib/claim/store.ts`: a plain-TypeScript store with per-field provenance,
   revision counters, and a review state machine. Tools read it at call time
   through `getSnapshot()`; React subscribes via `useSyncExternalStore`.
-- `lib/webmcp/registration-manager.ts` — registers tools exactly once,
+- `lib/webmcp/registration-manager.ts`: registers tools exactly once,
   reports rejected registrations as a visible degraded state, never
   unregisters.
-- `lib/webmcp/tools.ts` — binds the seven tools to any store with the same
+- `lib/webmcp/tools.ts`: binds the seven tools to any store with the same
   interface; swap `lib/claim/schema.ts` for your own questions.
-- `test/mock-model-context.ts` — a typed fake of `document.modelContext` that
+- `test/mock-model-context.ts`: a typed fake of `document.modelContext` that
   enforces the browser contracts (rejecting duplicate names, JSON-string
   arguments, cancellation events) so the whole loop runs under test.
 
@@ -111,7 +111,7 @@ The mediation layer is independent of this form:
   WebMCP. An agent driving the browser generically could still press the
   visible button; the page cannot tell a human click from an automated one.
   A trustworthy human-only approval boundary is a platform primitive WebMCP
-  does not yet provide — see the elicitation discussion in
+  does not yet provide. See the elicitation discussion in
   [issue #165](https://github.com/webmachinelearning/webmcp/issues/165) and
   the user-agent mediation requirements in
   [issue #277](https://github.com/webmachinelearning/webmcp/issues/277).
