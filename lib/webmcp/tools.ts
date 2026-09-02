@@ -83,7 +83,7 @@ export function createClaimTools(store: ClaimStore): WebMcpToolDefinition[] {
         next_suggested_tools: next,
         note:
           review === "staged"
-            ? "A review is staged. Only the person can approve it, in the page."
+            ? "A review is staged. Approval happens in the page; no tool can do it."
             : undefined,
       });
     },

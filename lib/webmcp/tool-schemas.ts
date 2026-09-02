@@ -121,7 +121,7 @@ export const TOOL_SCHEMAS: Record<string, ToolSchema> = {
   },
   prepare_submission_review: {
     description:
-      "Does NOT submit. Stages a review of the completed claim so the person can read every answer and what they are declaring, then decide. Returns the staged summary, or the required fields still missing. Only the person can approve, in the page." +
+      "Does NOT submit. Stages a review of the completed claim so the person can read every answer and what they are declaring, then decide. Returns the staged summary, or the required fields still missing. Approval happens in the page; no tool can do it." +
       ENTRY,
     readOnly: false,
     untrustedContent: true,
