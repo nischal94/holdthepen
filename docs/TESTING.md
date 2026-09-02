@@ -46,13 +46,13 @@ SHAs; the token has read-only permissions.
 Continuous-integration browsers do not expose `document.modelContext`, so the
 agent loop itself is verified by hand on the deployed site:
 
-| Check                                                                                                            | Where                                                    |
-| ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| Origin isolation and API presence on the live origin                                                             | Chrome 149+ with `chrome://flags/#enable-webmcp-testing` |
-| Tool registration succeeds (status turns green)                                                                  | same                                                     |
-| Golden path: explain → fill → conflict → review → approve                                                        | Chrome + flag, and the ChatGPT desktop browser           |
-| Keyboard-only walk-through and one screen reader                                                                 | same                                                     |
-| Layout at 320px wide and at 200% zoom: no horizontal scroll, section nav one row, review queue as a bottom sheet | any browser, device toolbar or zoom                      |
+| Check                                                                                                                                                  | Where                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------- |
+| Origin isolation and API presence on the live origin                                                                                                   | Chrome 149+ with `chrome://flags/#enable-webmcp-testing` |
+| Tool registration succeeds (status turns green)                                                                                                        | same                                                     |
+| Golden path: explain → fill → conflict → review → approve                                                                                              | Chrome + flag, and the ChatGPT desktop browser           |
+| Keyboard-only walk-through and one screen reader                                                                                                       | same                                                     |
+| Layout at 320px wide and at 200% zoom: no page-level horizontal scroll, section nav is one horizontally scrollable row, review queue as a bottom sheet | any browser, device toolbar or zoom                      |
 
 jsdom checks ARIA wiring (roles, names, `aria-describedby`, live-region text)
 but cannot verify real announcement timing, focus order under CSS, or colour
