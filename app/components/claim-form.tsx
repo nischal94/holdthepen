@@ -13,6 +13,7 @@ import {
 import { Approval } from "./approval";
 import { FieldControl } from "./field-control";
 import { JudgeKit } from "./judge-kit";
+import { Replay } from "./replay";
 import { ReviewQueue } from "./review-queue";
 
 /** One document: sections render conditionally, the URL never changes. */
@@ -88,8 +89,9 @@ export function ClaimForm() {
         </div>
       </header>
 
-      <div className="mb-6">
+      <div className="mb-6 grid gap-4 lg:grid-cols-2">
         <JudgeKit />
+        <Replay />
       </div>
 
       <nav

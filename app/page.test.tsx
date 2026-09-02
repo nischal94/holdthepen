@@ -172,8 +172,10 @@ describe("Hold the Pen page", () => {
     await userEvent.click(screen.getByRole("checkbox"));
     expect(submit).toBeEnabled();
     await userEvent.click(submit);
-    expect(await screen.findByText(/Claim submitted/)).toBeInTheDocument();
-    expect(screen.getByText(/WC-\d{4}-/)).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", { name: /Claim submitted/ })
+    ).toBeInTheDocument();
+    expect(screen.getAllByText(/WC-\d{4}-/).length).toBeGreaterThan(0);
   });
 
   it("has no axe violations on the form and the declaration page", async () => {
