@@ -5,8 +5,9 @@
 A benefits-style claim form that an AI agent can read, explain, and fill
 through [WebMCP](https://webmachinelearning.github.io/webmcp/) tools, while
 every value the agent writes stays marked, reviewable, and undoable, and no
-tool can submit the claim. Approval is a control on the page that only the
-person can use.
+tool can submit the claim. Submission is deliberately absent from the WebMCP
+tool contract; review and declaration happen in the page, through controls no
+tool can reach.
 
 **Live:** https://holdthepen.vercel.app
 &nbsp;·&nbsp; [Design](docs/DESIGN.md) &nbsp;·&nbsp; [Testing](docs/TESTING.md)
@@ -50,8 +51,12 @@ DOM. Hold the Pen uses that to draw a hard line:
    | "Fill in the household section for me: I'm Ada King, born 1990-12-10, two of us at home." | Three fields fill, each badged **Filled by the agent, not yet reviewed**; the review queue shows 3 entries. |
    | "Everything is filled in. Get it ready for me to check."                                  | The agent reports which required fields are still missing. Nothing is submitted.                            |
 
-4. **Try to break the line.** Type into a field yourself, then ask the agent
-   to change it. It refuses (`CONFLICT_HUMAN_VALUE`). Ask it to submit: there
+4. **Try to break the line.** The page protects you in two ways. While your
+   cursor is in a field, an agent write is refused with `CONFLICT_FOCUSED`.
+   Once you have answered a field, the agent cannot replace it and gets
+   `CONFLICT_HUMAN_VALUE`; the recorded demonstration shows this second case.
+   Type into a field yourself, then ask the agent to change it. Ask it to
+   submit: there
    is no tool for that; it can only prepare a review. Go to **Check and
    declare**: the submit button stays disabled, and says why, until every
    agent entry is accepted or corrected and the declaration is ticked.
