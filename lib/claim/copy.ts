@@ -55,6 +55,10 @@ export const COPY = {
     accept: "Accept",
     correct: "Correct",
     clear: "Clear",
+    show: "Show agent entries",
+    hide: "Hide agent entries",
+    showShort: "Show",
+    hideShort: "Hide",
   },
 
   announce: {
