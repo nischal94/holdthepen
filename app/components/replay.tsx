@@ -10,7 +10,7 @@ import {
 import { useClaimContext } from "@/lib/react/claim-context";
 
 /**
- * "Watch the agent flow" — for visitors without WebMCP. Plays the scripted
+ * "Watch the agent flow", for visitors without WebMCP. Plays the scripted
  * demonstration through the real tools and shows a transcript. Clearly
  * labelled as recorded; ends with the person's own review and approval.
  *
@@ -97,7 +97,7 @@ export function Replay() {
       </div>
       <p className="mt-1 text-sm text-neutral-700">
         No WebMCP browser? Play a scripted run that uses the same tools a live
-        agent would. It resets the form and stops before approval — that part is
+        agent would. It resets the form and stops before approval. That part is
         yours.
       </p>
 

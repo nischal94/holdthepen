@@ -11,26 +11,26 @@ npm run test:watch
 
 **Unit and component tests** (vitest, jsdom, Testing Library):
 
-- **Claim store** — provenance, per-field revisions, conflict rules (an agent
+- **Claim store**: provenance, per-field revisions, conflict rules (an agent
   never overwrites a person's value or a field being edited), validation
   errors the agent can act on, the review state machine (any change
   invalidates a staged review; approval is impossible with unreviewed agent
   entries or an unticked declaration), hydration.
-- **Stale-closure guard** — a callback created once must see writes made many
+- **Stale-closure guard**: a callback created once must see writes made many
   updates later. This is the test that protects the "tools read the store at
   call time" rule.
-- **Registration manager** — registers once, reports a rejected registration
+- **Registration manager**: registers once, reports a rejected registration
   as a visible degraded state, never unregisters, shares one in-flight
   registration between concurrent callers.
-- **The seven tools** — error envelope on every failure, output cap, exactly
+- **The seven tools**: error envelope on every failure, output cap, exactly
   seven names and no commit tool, read-only and untrusted-content annotations.
-- **WebMCP fake** — `test/mock-model-context.ts` enforces the browser
+- **WebMCP fake**: `test/mock-model-context.ts` enforces the browser
   contracts real code gets wrong: `registerTool` rejects duplicate or invalid
   names, `executeTool` takes a JSON string, cancellation fires the signal and
   both `toolcancel` and `toolcanceled` event spellings.
-- **Accessibility** — axe runs inside component tests; zero violations is a
+- **Accessibility**: axe runs inside component tests; zero violations is a
   failing condition.
-- **Eval fixtures** — `evals/*.eval.json` (direct, ambiguous, and mid-chain
+- **Eval fixtures**: `evals/*.eval.json` (direct, ambiguous, and mid-chain
   prompts) are validated by a test: every expected call must name a real tool
   and only its declared arguments.
 

@@ -1,7 +1,7 @@
 /**
  * A deterministic, clearly-labelled demonstration for visitors whose browser
- * has no WebMCP. It drives the REAL store through the REAL tool executors —
- * nothing is faked except the agent's timing — and it stops before approval:
+ * has no WebMCP. It drives the REAL store through the REAL tool executors
+ * (nothing is faked except the agent's timing) and it stops before approval:
  * the person still has to review and submit.
  */
 import type { ClaimStore } from "./store";
@@ -103,7 +103,7 @@ export const REPLAY_STEPS: ReplayStep[] = [
   },
   {
     actor: "you",
-    text: "“Everything is filled in — get it ready for me to check.”",
+    text: "“Everything is filled in. Get it ready for me to check.”",
     delay: 1600,
   },
   {
@@ -144,7 +144,7 @@ export const REPLAY_STEPS: ReplayStep[] = [
   },
   {
     actor: "narrator",
-    text: "Your turn. Six entries are waiting in the review queue. Accept or correct each one, tick the declaration, and only then can the claim be submitted — by you.",
+    text: "Your turn. Six entries are waiting in the review queue. Accept or correct each one, tick the declaration, and only then can the claim be submitted, by you.",
     delay: 1200,
     run: async (store) => {
       store.navigate("declaration");

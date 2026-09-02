@@ -1,7 +1,7 @@
 /**
  * Binds the seven claim tools to a claim store.
  *
- * Every execute() reads the store at call time through getSnapshot() — the
+ * Every execute() reads the store at call time through getSnapshot(); the
  * definitions are created once and registered once, so a closure over React
  * state would be frozen at mount. Every failure returns the error envelope
  * {code, problem, cause, fix, retryable} so the agent can self-correct.
@@ -142,7 +142,7 @@ export function createClaimTools(store: ClaimStore): WebMcpToolDefinition[] {
         (rec) => ({
           field_id: rec.id,
           value: rec.value,
-          status: "filled by agent — needs the person's review",
+          status: "filled by agent, needs the person's review",
           revision: rec.revision,
         })
       ),
