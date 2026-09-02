@@ -256,6 +256,22 @@ describe("Hold the Pen page", () => {
     );
   });
 
+  it("leaves focus alone on first render and moves it only on navigation", async () => {
+    render(<HomePage />);
+    await waitFor(() =>
+      expect(screen.getByText(/Agent tools unavailable/)).toBeInTheDocument()
+    );
+    expect(document.body).toHaveFocus();
+    await userEvent.click(
+      screen.getByRole("button", { name: /2\. Money coming in/ })
+    );
+    await waitFor(() =>
+      expect(
+        screen.getByRole("heading", { level: 2, name: "Money coming in" })
+      ).toHaveFocus()
+    );
+  });
+
   it("has no axe violations on the form and the declaration page", async () => {
     const fake = await withAgent();
     expect(await axe(document.body)).toHaveNoViolations();
