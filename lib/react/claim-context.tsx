@@ -33,6 +33,8 @@ const ClaimContext = createContext<ClaimContextValue | null>(null);
 
 const STORAGE_KEY = "holdthepen.draft.v1";
 const ANNOUNCE_DEBOUNCE_MS = 700;
+/** How long an announcement stays in the live region before it is emptied. */
+const ANNOUNCE_HOLD_MS = 5000;
 
 /**
  * Creates the store, registers the seven tools exactly once, and turns agent
@@ -40,8 +42,19 @@ const ANNOUNCE_DEBOUNCE_MS = 700;
  *
  * The store and manager are created in a ref so React StrictMode's double
  * mount cannot create a second store or a second registration.
+ *
+ * Every announcement is emptied after `announceHoldMs`. Screen readers speak
+ * a live region on change, so the hold is long enough to be read once; the
+ * clear keeps stale status text out of the virtual cursor's path and lets an
+ * identical announcement fire again later.
  */
-export function ClaimProvider({ children }: { children: ReactNode }) {
+export function ClaimProvider({
+  children,
+  announceHoldMs = ANNOUNCE_HOLD_MS,
+}: {
+  children: ReactNode;
+  announceHoldMs?: number;
+}) {
   const ref = useRef<{
     store: ClaimStore;
     manager: RegistrationManager;
@@ -100,6 +113,12 @@ export function ClaimProvider({ children }: { children: ReactNode }) {
         timer = setTimeout(flush, ANNOUNCE_DEBOUNCE_MS);
     });
   }, [store]);
+
+  useEffect(() => {
+    if (!announcement) return;
+    const timer = setTimeout(() => setAnnouncement(""), announceHoldMs);
+    return () => clearTimeout(timer);
+  }, [announcement, announceHoldMs]);
 
   const value = useMemo<ClaimContextValue>(
     () => ({ store, manager, announcement, announce: setAnnouncement }),
