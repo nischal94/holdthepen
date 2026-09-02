@@ -3,7 +3,9 @@ import userEvent from "@testing-library/user-event";
 import { axe } from "jest-axe";
 import { afterEach, describe, expect, it } from "vitest";
 import HomePage from "./page";
+import { ClaimForm } from "./components/claim-form";
 import { FIELD_STATE_LABEL } from "@/lib/claim/copy";
+import { ClaimProvider } from "@/lib/react/claim-context";
 import {
   FakeModelContext,
   installFakeModelContext,
@@ -216,6 +218,30 @@ describe("Hold the Pen page", () => {
     await waitFor(() =>
       expect(screen.getByLabelText(/How many people live/)).toHaveFocus()
     );
+  });
+
+  it("empties the live region after the announcement has been held", async () => {
+    const installed = installFakeModelContext("document");
+    restore = installed.restore;
+    render(
+      <ClaimProvider announceHoldMs={60}>
+        <ClaimForm />
+      </ClaimProvider>
+    );
+    await waitFor(() =>
+      expect(
+        screen.getByRole("status", { name: "Agent tools status" })
+      ).toHaveTextContent(/7 agent tools registered/)
+    );
+    await agentCall(installed.fake, "fill_field", {
+      field_id: "household_size",
+      value: "2",
+    });
+    const live = document.querySelector(".sr-only[aria-live]")!;
+    await waitFor(() =>
+      expect(live.textContent).toMatch(/How many people live/)
+    );
+    await waitFor(() => expect(live.textContent).toBe(""));
   });
 
   it("has no axe violations on the form and the declaration page", async () => {
