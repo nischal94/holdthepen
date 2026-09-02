@@ -124,7 +124,7 @@ export function FieldControl({
                 onChange={() => set(v)}
                 onFocus={() => store.setFocus(def.id)}
                 onBlur={() => store.setFocus(null)}
-                className="h-5 w-5"
+                className="h-5 w-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
               />
               {l}
             </label>
