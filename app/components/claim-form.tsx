@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { COPY } from "@/lib/claim/copy";
 import type { SectionId } from "@/lib/claim/types";
 import {
@@ -29,8 +29,12 @@ export function ClaimForm() {
     loadDraft(store);
   }, [store]);
 
-  // Move focus to the section heading when navigation happens (tool or click).
+  // Move focus to the section heading when navigation happens (tool or
+  // click), never on first render: the page must open at the top.
+  const lastFocused = useRef(current);
   useEffect(() => {
+    if (lastFocused.current === current) return;
+    lastFocused.current = current;
     document.getElementById(`section-${current}`)?.focus();
   }, [current]);
 
