@@ -26,10 +26,14 @@ export function Approval() {
   if (state.review.status === "approved") {
     return (
       <section
-        aria-labelledby="done-heading"
+        aria-labelledby="section-declaration"
         className="rounded-lg border border-green-700 bg-green-50 p-6"
       >
-        <h2 id="done-heading" className="text-2xl font-semibold text-green-900">
+        <h2
+          id="section-declaration"
+          tabIndex={-1}
+          className="text-2xl font-semibold text-green-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-700"
+        >
           {COPY.approval.done}
         </h2>
         <p className="mt-2">
@@ -52,8 +56,12 @@ export function Approval() {
         : null;
 
   return (
-    <section aria-labelledby="approval-heading" className="space-y-4">
-      <h2 id="approval-heading" className="text-2xl font-semibold">
+    <section aria-labelledby="section-declaration" className="space-y-4">
+      <h2
+        id="section-declaration"
+        tabIndex={-1}
+        className="text-2xl font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-700"
+      >
         {COPY.approval.heading}
       </h2>
       <p className="text-[15px] text-neutral-700">{COPY.approval.intro}</p>
@@ -129,7 +137,7 @@ export function Approval() {
       <label className="flex min-h-11 items-start gap-3 text-[15px]">
         <input
           type="checkbox"
-          className="mt-1 h-5 w-5"
+          className="mt-1 h-5 w-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
           checked={confirmed}
           onChange={(e) => setConfirmed(e.target.checked)}
         />

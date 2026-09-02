@@ -4,7 +4,7 @@ import { axe } from "jest-axe";
 import { afterEach, describe, expect, it } from "vitest";
 import HomePage from "./page";
 import { ClaimForm } from "./components/claim-form";
-import { FIELD_STATE_LABEL } from "@/lib/claim/copy";
+import { COPY, FIELD_STATE_LABEL } from "@/lib/claim/copy";
 import { ClaimProvider } from "@/lib/react/claim-context";
 import {
   FakeModelContext,
@@ -242,6 +242,18 @@ describe("Hold the Pen page", () => {
       expect(live.textContent).toMatch(/How many people live/)
     );
     await waitFor(() => expect(live.textContent).toBe(""));
+  });
+
+  it("moves focus to the declaration heading when that section opens", async () => {
+    render(<HomePage />);
+    await userEvent.click(
+      screen.getByRole("button", { name: /Check and declare/ })
+    );
+    await waitFor(() =>
+      expect(
+        screen.getByRole("heading", { level: 2, name: COPY.approval.heading })
+      ).toHaveFocus()
+    );
   });
 
   it("has no axe violations on the form and the declaration page", async () => {
