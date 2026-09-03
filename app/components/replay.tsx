@@ -116,7 +116,7 @@ export function Replay() {
               ref={confirmButton}
               type="button"
               onClick={() => void play()}
-              className="min-h-11 rounded-md bg-neutral-900 px-4 text-sm font-medium text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+              className="min-h-11 rounded-md bg-blue-800 px-4 text-sm font-medium text-white hover:bg-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
             >
               Clear and play
             </button>
@@ -136,7 +136,7 @@ export function Replay() {
             type="button"
             onClick={requestPlay}
             disabled={playing}
-            className="min-h-11 rounded-md bg-neutral-900 px-4 text-sm font-medium text-white disabled:bg-neutral-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+            className="min-h-11 rounded-md bg-blue-800 px-4 text-sm font-medium text-white hover:bg-blue-900 disabled:bg-neutral-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
           >
             {playing
               ? "Playing…"

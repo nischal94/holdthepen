@@ -191,7 +191,7 @@ export function ClaimForm() {
                 <button
                   type="button"
                   onClick={() => go(sections[idx + 1].id)}
-                  className="min-h-11 rounded-md bg-neutral-900 px-4 text-sm font-medium text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+                  className="min-h-11 rounded-md bg-blue-800 px-4 text-sm font-medium text-white hover:bg-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
                 >
                   Next: {sections[idx + 1].title}
                 </button>

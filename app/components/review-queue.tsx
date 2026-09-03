@@ -66,8 +66,14 @@ export function ReviewQueue() {
                   key={id}
                   className="rounded-md border border-amber-300 bg-amber-50 p-3"
                 >
-                  <p className="text-sm font-medium">{def.label}</p>
-                  <p className="mt-0.5 break-words font-mono text-sm">
+                  <p className="flex items-start gap-2 text-sm font-medium">
+                    <span
+                      aria-hidden="true"
+                      className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-700"
+                    />
+                    {def.label}
+                  </p>
+                  <p className="mt-1 ml-3.5 break-words font-mono text-sm">
                     {rec.value}
                   </p>
                   <div className="mt-2 flex flex-wrap gap-2">
