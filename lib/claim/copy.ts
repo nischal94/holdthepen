@@ -18,6 +18,23 @@ export const COPY = {
   claimTitle: "Wendell County Household Support Allowance",
   claimPurpose:
     "This claim decides whether you receive a monthly allowance and how much. An agent can explain and fill it for you. Nothing is sent until you approve it.",
+  split: [
+    {
+      who: "Agent",
+      does: "Understand",
+      detail: "Explains any question in plain language. Read-only.",
+    },
+    {
+      who: "Agent",
+      does: "Fill",
+      detail: "Writes values that stay marked, reviewable, and undoable.",
+    },
+    {
+      who: "You",
+      does: "Decide",
+      detail: "Review every entry, tick the declaration, submit. No tool can.",
+    },
+  ],
   storageNote:
     "Your answers stay in this browser tab. Use “Save draft on this device” to keep them for this session only.",
 

@@ -93,6 +93,27 @@ export function ClaimForm() {
             {notice}
           </span>
         </div>
+        <ol
+          aria-label="Who does what"
+          className="mt-6 grid gap-px overflow-hidden rounded-md border border-neutral-300 bg-neutral-300 sm:grid-cols-3"
+        >
+          {COPY.split.map((s) => (
+            <li
+              key={s.does}
+              className={`p-4 ${s.who === "You" ? "bg-green-50" : "bg-white"}`}
+            >
+              <p
+                className={`text-xs font-semibold tracking-wide ${s.who === "You" ? "text-green-900" : "text-amber-900"}`}
+              >
+                {s.who}
+              </p>
+              <p className="mt-0.5 font-serif text-xl font-semibold">
+                {s.does}
+              </p>
+              <p className="mt-1 text-sm text-neutral-700">{s.detail}</p>
+            </li>
+          ))}
+        </ol>
       </header>
 
       <div className="mb-8 grid gap-4 lg:grid-cols-2">
@@ -111,13 +132,24 @@ export function ClaimForm() {
                 type="button"
                 onClick={() => go(s.id)}
                 aria-current={s.id === current ? "step" : undefined}
-                className={`min-h-11 rounded-md px-3 text-sm font-medium whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 ${
+                className={`inline-flex min-h-11 items-center gap-2 rounded-md py-1 pr-3 pl-1.5 text-sm font-medium whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 ${
                   s.id === current
                     ? "bg-neutral-900 text-white"
-                    : "border border-neutral-500 hover:bg-neutral-200"
+                    : "border border-neutral-400 hover:bg-neutral-200"
                 }`}
               >
-                {i + 1}. {s.title}
+                <span
+                  aria-hidden="true"
+                  className={`grid h-7 w-7 place-items-center rounded-full text-xs font-semibold ${
+                    s.id === current
+                      ? "bg-white text-neutral-900"
+                      : "bg-neutral-200 text-neutral-800"
+                  }`}
+                >
+                  {i + 1}
+                </span>
+                <span className="sr-only">{i + 1}. </span>
+                {s.title}
               </button>
             </li>
           ))}
