@@ -62,7 +62,7 @@ export function FieldControl({
     onFocus: () => store.setFocus(def.id),
     onBlur: () => store.setFocus(null),
     className:
-      "mt-1 block w-full rounded border border-neutral-500 bg-white px-3 py-2 text-base focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-700",
+      "mt-1 block w-full rounded-md border border-neutral-500 bg-white px-3 py-2 text-base focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-700",
   };
 
   function set(value: string) {
@@ -71,12 +71,12 @@ export function FieldControl({
 
   return (
     <div
-      className="rounded-lg border border-neutral-200 bg-white p-4"
+      className="rounded-md border border-neutral-300 bg-white p-5"
       data-field={def.id}
       data-state={state}
     >
       <div className="flex flex-wrap items-start justify-between gap-2">
-        <label htmlFor={def.id} className="text-base font-medium">
+        <label htmlFor={def.id} className="text-[17px] font-semibold">
           {def.label}
           {def.required && <span aria-hidden="true"> *</span>}
         </label>
@@ -150,7 +150,7 @@ export function FieldControl({
         <div className="mt-3 flex flex-wrap gap-2">
           <button
             type="button"
-            className="min-h-11 rounded bg-green-800 px-4 text-sm font-medium text-white hover:bg-green-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+            className="min-h-11 rounded-md bg-green-800 px-4 text-sm font-medium text-white hover:bg-green-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
             onClick={() => {
               store.acceptField(def.id);
               announce(COPY.announce.accepted(def.label));
@@ -160,7 +160,7 @@ export function FieldControl({
           </button>
           <button
             type="button"
-            className="min-h-11 rounded border border-neutral-600 px-4 text-sm font-medium hover:bg-neutral-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+            className="min-h-11 rounded-md border border-neutral-600 px-4 text-sm font-medium hover:bg-neutral-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
             onClick={() => {
               store.clearField(def.id);
               announce(COPY.announce.cleared(def.label));

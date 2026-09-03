@@ -5,7 +5,7 @@ import { COPY } from "@/lib/claim/copy";
 import { useClaimContext, useClaimState } from "@/lib/react/claim-context";
 
 const ACTION_BUTTON =
-  "min-h-11 rounded px-3 text-sm font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700";
+  "min-h-11 rounded-md px-3 text-sm font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700";
 
 /**
  * Persistent list of agent-supplied entries awaiting review. Every row can be
@@ -27,7 +27,7 @@ export function ReviewQueue() {
     <aside
       aria-labelledby="queue-heading"
       data-open={open}
-      className="fixed inset-x-0 bottom-0 z-20 border-t border-neutral-300 bg-white shadow-[0_-4px_12px_rgba(0,0,0,0.08)] lg:static lg:rounded-lg lg:border lg:shadow-none"
+      className="fixed inset-x-0 bottom-0 z-20 border-t border-neutral-300 bg-white shadow-[0_-4px_12px_rgba(0,0,0,0.08)] lg:static lg:rounded-md lg:border lg:shadow-none"
     >
       <div className="flex items-center justify-between gap-3 px-4 py-3 lg:block lg:p-4">
         <div className="min-w-0">
@@ -64,7 +64,7 @@ export function ReviewQueue() {
               return (
                 <li
                   key={id}
-                  className="rounded border border-amber-300 bg-amber-50 p-3"
+                  className="rounded-md border border-amber-300 bg-amber-50 p-3"
                 >
                   <p className="text-sm font-medium">{def.label}</p>
                   <p className="mt-0.5 break-words font-mono text-sm">
