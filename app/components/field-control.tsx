@@ -53,6 +53,14 @@ export function FieldControl({
         : state === "empty"
           ? "border-neutral-400 bg-neutral-100 text-neutral-700"
           : "border-green-700 bg-green-50 text-green-900";
+  const dotTone =
+    state === "agentUnreviewed"
+      ? "bg-amber-700"
+      : state === "invalid"
+        ? "bg-red-700"
+        : state === "empty"
+          ? "bg-neutral-400"
+          : "bg-green-700";
 
   const common = {
     id: def.id,
@@ -62,7 +70,7 @@ export function FieldControl({
     onFocus: () => store.setFocus(def.id),
     onBlur: () => store.setFocus(null),
     className:
-      "mt-1 block w-full rounded-md border border-neutral-500 bg-white px-3 py-2 text-base focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-700",
+      "mt-3 block w-full rounded-md border border-neutral-500 bg-white px-3 py-2.5 text-base focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-700",
   };
 
   function set(value: string) {
@@ -75,20 +83,24 @@ export function FieldControl({
       data-field={def.id}
       data-state={state}
     >
-      <div className="flex flex-wrap items-start justify-between gap-2">
-        <label htmlFor={def.id} className="text-[17px] font-semibold">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <label htmlFor={def.id} className="text-[17px] leading-6 font-semibold">
           {def.label}
           {def.required && <span aria-hidden="true"> *</span>}
         </label>
         <span
           id={stateId}
-          className={`rounded-full border px-2 py-0.5 text-xs font-medium ${badgeTone}`}
+          className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium ${badgeTone}`}
         >
+          <span
+            aria-hidden="true"
+            className={`h-1.5 w-1.5 rounded-full ${dotTone}`}
+          />
           {badge}
         </span>
       </div>
 
-      <p id={explainId} className="mt-1 text-sm text-neutral-600">
+      <p id={explainId} className="mt-1.5 max-w-prose text-sm text-neutral-600">
         {def.explain.meaning}
       </p>
 
@@ -106,7 +118,7 @@ export function FieldControl({
           ))}
         </select>
       ) : def.kind === "boolean" ? (
-        <fieldset className="mt-1" aria-describedby={describedBy}>
+        <fieldset className="mt-3" aria-describedby={describedBy}>
           <legend className="sr-only">{def.label}</legend>
           {[
             ["true", "Yes"],
@@ -141,7 +153,7 @@ export function FieldControl({
       )}
 
       {rec.error && rec.value !== "" && (
-        <p id={errorId} className="mt-1 text-sm text-red-800">
+        <p id={errorId} className="mt-2 text-sm text-red-800">
           {rec.error}
         </p>
       )}
