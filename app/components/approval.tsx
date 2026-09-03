@@ -27,12 +27,12 @@ export function Approval() {
     return (
       <section
         aria-labelledby="section-declaration"
-        className="rounded-lg border border-green-700 bg-green-50 p-6"
+        className="rounded-md border border-green-700 bg-green-50 p-6"
       >
         <h2
           id="section-declaration"
           tabIndex={-1}
-          className="text-2xl font-semibold text-green-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-700"
+          className="font-serif text-3xl font-semibold text-green-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-700"
         >
           {COPY.approval.done}
         </h2>
@@ -60,7 +60,7 @@ export function Approval() {
       <h2
         id="section-declaration"
         tabIndex={-1}
-        className="text-2xl font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-700"
+        className="font-serif text-3xl font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-700"
       >
         {COPY.approval.heading}
       </h2>
@@ -68,7 +68,7 @@ export function Approval() {
 
       {missing.length > 0 ? (
         <p
-          className="rounded border border-amber-700 bg-amber-50 p-3 text-sm"
+          className="rounded-md border border-amber-700 bg-amber-50 p-3 text-sm"
           role="status"
         >
           Required questions still need an answer:{" "}
@@ -81,7 +81,7 @@ export function Approval() {
             const r = store.stageReview();
             setError(r.ok ? null : r.error.problem);
           }}
-          className="min-h-11 rounded border border-neutral-700 px-4 text-sm font-medium hover:bg-neutral-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+          className="min-h-11 rounded-md border border-neutral-700 px-4 text-sm font-medium hover:bg-neutral-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
         >
           {state.review.status === "invalidated"
             ? COPY.approval.reprepare
@@ -153,7 +153,7 @@ export function Approval() {
             const r = store.approve({ confirmed });
             setError(r.ok ? null : r.error.problem);
           }}
-          className="min-h-11 rounded bg-blue-800 px-5 text-base font-semibold text-white disabled:cursor-not-allowed disabled:bg-neutral-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+          className="min-h-11 rounded-md bg-blue-800 px-5 text-base font-semibold text-white disabled:cursor-not-allowed disabled:bg-neutral-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
         >
           {COPY.approval.submit}
         </button>

@@ -85,7 +85,7 @@ export function Replay() {
   return (
     <section
       aria-labelledby="replay-heading"
-      className="rounded-lg border border-neutral-300 bg-white p-4"
+      className="rounded-md border border-neutral-300 bg-white/60 p-5"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 id="replay-heading" className="text-base font-semibold">
@@ -105,7 +105,7 @@ export function Replay() {
         <div
           role="alertdialog"
           aria-labelledby="replay-confirm"
-          className="mt-3 rounded border border-amber-700 bg-amber-50 p-3"
+          className="mt-3 rounded-md border border-amber-700 bg-amber-50 p-3"
         >
           <p id="replay-confirm" className="text-sm font-medium">
             Playing the demonstration clears everything you have entered so far.
@@ -116,14 +116,14 @@ export function Replay() {
               ref={confirmButton}
               type="button"
               onClick={() => void play()}
-              className="min-h-11 rounded bg-neutral-900 px-4 text-sm font-medium text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+              className="min-h-11 rounded-md bg-neutral-900 px-4 text-sm font-medium text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
             >
               Clear and play
             </button>
             <button
               type="button"
               onClick={() => setConfirming(false)}
-              className="min-h-11 rounded border border-neutral-600 px-4 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+              className="min-h-11 rounded-md border border-neutral-600 px-4 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
             >
               Keep my answers
             </button>
@@ -136,7 +136,7 @@ export function Replay() {
             type="button"
             onClick={requestPlay}
             disabled={playing}
-            className="min-h-11 rounded bg-neutral-900 px-4 text-sm font-medium text-white disabled:bg-neutral-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+            className="min-h-11 rounded-md bg-neutral-900 px-4 text-sm font-medium text-white disabled:bg-neutral-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
           >
             {playing
               ? "Playing…"
@@ -149,7 +149,7 @@ export function Replay() {
               ref={stopButton}
               type="button"
               onClick={stop}
-              className="min-h-11 rounded border border-neutral-600 px-4 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+              className="min-h-11 rounded-md border border-neutral-600 px-4 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
             >
               Stop
             </button>
@@ -168,9 +168,9 @@ export function Replay() {
               key={i}
               className={
                 l.actor === "agent"
-                  ? "rounded bg-amber-50 p-2"
+                  ? "rounded-md bg-amber-50 p-2"
                   : l.actor === "you"
-                    ? "rounded bg-neutral-100 p-2"
+                    ? "rounded-md bg-neutral-100 p-2"
                     : "text-sm text-neutral-700"
               }
             >

@@ -50,12 +50,14 @@ export function ClaimForm() {
         {announcement}
       </p>
 
-      <header className="mb-6">
-        <p className="text-sm font-medium uppercase tracking-wide text-neutral-600">
+      <header className="mb-8">
+        <p className="text-sm font-medium tracking-wide text-neutral-600">
           {COPY.productName}
         </p>
-        <h1 className="mt-1 text-3xl font-semibold">{COPY.claimTitle}</h1>
-        <p className="mt-2 max-w-2xl text-[15px] text-neutral-700">
+        <h1 className="mt-1 font-serif text-4xl font-semibold tracking-tight md:text-5xl">
+          {COPY.claimTitle}
+        </h1>
+        <p className="mt-3 max-w-2xl text-lg text-neutral-800">
           {COPY.claimPurpose}
         </p>
         <p className="mt-1 max-w-2xl text-sm text-neutral-600">
@@ -64,7 +66,7 @@ export function ClaimForm() {
         <div className="mt-3 flex flex-wrap gap-2">
           <button
             type="button"
-            className="min-h-11 rounded border border-neutral-600 px-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+            className="min-h-11 rounded-md border border-neutral-600 px-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
             onClick={() => {
               setNotice(
                 saveDraft(store)
@@ -78,7 +80,7 @@ export function ClaimForm() {
           </button>
           <button
             type="button"
-            className="min-h-11 rounded border border-neutral-600 px-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+            className="min-h-11 rounded-md border border-neutral-600 px-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
             onClick={() => {
               clearDraft(store);
               setNotice(COPY.actions.clearedData);
@@ -93,14 +95,14 @@ export function ClaimForm() {
         </div>
       </header>
 
-      <div className="mb-6 grid gap-4 lg:grid-cols-2">
+      <div className="mb-8 grid gap-4 lg:grid-cols-2">
         <JudgeKit />
         <Replay />
       </div>
 
       <nav
         aria-label="Claim sections"
-        className="sticky top-0 z-10 mb-6 border-b border-neutral-300 bg-[#f8f7f4] py-2"
+        className="sticky top-0 z-10 mb-6 border-b border-neutral-300 bg-paper py-2"
       >
         <ol className="-mx-1 flex gap-2 overflow-x-auto px-1 py-1 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0">
           {sections.map((s, i) => (
@@ -109,7 +111,7 @@ export function ClaimForm() {
                 type="button"
                 onClick={() => go(s.id)}
                 aria-current={s.id === current ? "step" : undefined}
-                className={`min-h-11 rounded px-3 text-sm font-medium whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 ${
+                className={`min-h-11 rounded-md px-3 text-sm font-medium whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 ${
                   s.id === current
                     ? "bg-neutral-900 text-white"
                     : "border border-neutral-500 hover:bg-neutral-200"
@@ -131,11 +133,11 @@ export function ClaimForm() {
               <h2
                 id={`section-${current}`}
                 tabIndex={-1}
-                className="text-2xl font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-700"
+                className="font-serif text-3xl font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-700"
               >
                 {sections[idx].title}
               </h2>
-              <p className="mt-1 mb-4 text-[15px] text-neutral-700">
+              <p className="mt-1 mb-5 text-base text-neutral-700">
                 {sections[idx].purpose}
               </p>
               <div className="space-y-4">
@@ -150,14 +152,14 @@ export function ClaimForm() {
                   type="button"
                   disabled={idx === 0}
                   onClick={() => go(sections[idx - 1].id)}
-                  className="min-h-11 rounded border border-neutral-600 px-4 text-sm disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+                  className="min-h-11 rounded-md border border-neutral-600 px-4 text-sm disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
                 >
                   Back
                 </button>
                 <button
                   type="button"
                   onClick={() => go(sections[idx + 1].id)}
-                  className="min-h-11 rounded bg-neutral-900 px-4 text-sm font-medium text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+                  className="min-h-11 rounded-md bg-neutral-900 px-4 text-sm font-medium text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
                 >
                   Next: {sections[idx + 1].title}
                 </button>

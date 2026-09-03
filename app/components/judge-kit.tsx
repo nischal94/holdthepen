@@ -21,7 +21,7 @@ function CopyButton({ text, label }: { text: string; label: string }) {
       type="button"
       onClick={copy}
       aria-label={`${COPY.kit.copy}: ${label}`}
-      className="ml-2 min-h-11 rounded border border-neutral-500 px-3 text-sm hover:bg-neutral-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+      className="ml-2 min-h-11 rounded-md border border-neutral-500 px-3 text-sm hover:bg-neutral-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
     >
       {done ? COPY.kit.copied : COPY.kit.copy}
     </button>
@@ -38,10 +38,10 @@ export function JudgeKit() {
   return (
     <section
       aria-labelledby="kit-heading"
-      className="rounded-lg border border-neutral-300 bg-white p-5"
+      className="rounded-md border border-neutral-300 bg-white/60 p-5"
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 id="kit-heading" className="text-lg font-semibold">
+        <h2 id="kit-heading" className="text-base font-semibold">
           {COPY.kit.heading}
         </h2>
         <StatusChip />
@@ -52,7 +52,7 @@ export function JudgeKit() {
           <li>
             {COPY.kit.step1}
             <div className="mt-1 flex flex-wrap items-center">
-              <code className="rounded bg-neutral-200 px-1.5 py-0.5 text-sm">
+              <code className="rounded-md bg-neutral-200 px-1.5 py-0.5 text-sm">
                 {COPY.kit.flag}
               </code>
               <CopyButton
@@ -72,7 +72,7 @@ export function JudgeKit() {
       >
         {COPY.kit.prompts.map((p) => (
           <li key={p} className="flex flex-wrap items-center text-[15px]">
-            <span className="rounded bg-neutral-100 px-2 py-1">“{p}”</span>
+            <span className="rounded-md bg-neutral-100 px-2 py-1">“{p}”</span>
             <CopyButton text={p} label={`prompt: ${p.slice(0, 30)}`} />
           </li>
         ))}
