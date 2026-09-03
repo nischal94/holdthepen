@@ -135,7 +135,7 @@ export function ClaimForm() {
                 className={`inline-flex min-h-11 items-center gap-2 rounded-md py-1 pr-3 pl-1.5 text-sm font-medium whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 ${
                   s.id === current
                     ? "bg-neutral-900 text-white"
-                    : "border border-neutral-400 hover:bg-neutral-200"
+                    : "border border-neutral-500 hover:bg-neutral-200"
                 }`}
               >
                 <span
